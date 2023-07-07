@@ -14,3 +14,8 @@
 #### Autowired nedir? Neden cons inj. neden autowired?
 #### SpringFramework vs SpringBoot?
 #### SOLID prensipleri nelerdir?
+
+# -----------------------------------------------------------------------------------------
+
+## UserProfileService
+### 1- MongoDB denemesi için veritabanına bir kayıt yapılmalıdır. Bu işlem için DTO ve Mapper kullanınız.

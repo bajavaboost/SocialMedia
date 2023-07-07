@@ -13,7 +13,6 @@ import javax.persistence.*;
 @SuperBuilder
 @Entity
 public class Auth extends BaseEntity{
-    //Test
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
