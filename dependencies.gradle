@@ -1,10 +1,11 @@
 ext {
     versions = [
-            springBoot: "2.7.9",
-            postgresql: "42.6.0",
-            lombok    : "1.18.26",
-            mapstruct : "1.5.5.Final",
-            openapi   : "1.6.14",
+            springBoot : "2.7.9",
+            postgresql : "42.6.0",
+            lombok     : "1.18.26",
+            mapstruct  : "1.5.5.Final",
+            openapi    : "1.6.14",
+            springCloud: "3.1.5"
     ]
 
 
@@ -18,6 +19,8 @@ ext {
             mapstructProcessor  : "org.mapstruct:mapstruct-processor:$versions.mapstruct",
             openapi             : "org.springdoc:springdoc-openapi-ui:$versions.openapi",
             //mongoDB
-            mongoDB             : "org.springframework.boot:spring-boot-starter-data-mongodb:${versions.springBoot}"
+            mongoDB             : "org.springframework.boot:spring-boot-starter-data-mongodb:${versions.springBoot}",
+            //feignClient
+            springOpenFeign     : "org.springframework.cloud:spring-cloud-starter-openfeign:${versions.springCloud}"
     ]
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class AuthRegisterResponseDto {
+public class RegisterResponseDto {
     private Long id;
     private String username;
     private String activationCode;

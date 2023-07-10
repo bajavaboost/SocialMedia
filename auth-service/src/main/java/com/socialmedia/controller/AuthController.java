@@ -1,9 +1,9 @@
 package com.socialmedia.controller;
 
 import com.socialmedia.dto.request.ActivateRequestDto;
-import com.socialmedia.dto.request.AuthLoginRequestDto;
-import com.socialmedia.dto.request.AuthRegisterRequestDto;
-import com.socialmedia.dto.response.AuthRegisterResponseDto;
+import com.socialmedia.dto.request.LoginRequestDto;
+import com.socialmedia.dto.request.RegisterRequestDto;
+import com.socialmedia.dto.response.RegisterResponseDto;
 import com.socialmedia.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +20,11 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthRegisterResponseDto> register(@RequestBody AuthRegisterRequestDto dto){
+    public ResponseEntity<RegisterResponseDto> register(@RequestBody RegisterRequestDto dto){
         return ResponseEntity.ok(authService.register(dto));
     }
     @PostMapping("/login")
-    public ResponseEntity<Boolean> login(@RequestBody AuthLoginRequestDto dto){
+    public ResponseEntity<Boolean> login(@RequestBody LoginRequestDto dto){
         return ResponseEntity.ok(authService.login(dto));
     }
 

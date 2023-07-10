@@ -1,11 +1,11 @@
 package com.socialmedia.convertor;
 
-import com.socialmedia.dto.request.AuthRegisterRequestDto;
+import com.socialmedia.dto.request.RegisterRequestDto;
 import com.socialmedia.repository.entity.Auth;
 
 public class ConvertFromDtoToAuth {
 
-    public static Auth convertToAuth(AuthRegisterRequestDto dto){
+    public static Auth convertToAuth(RegisterRequestDto dto){
         if(dto == null){
             throw new RuntimeException("Hata");
         }else{

@@ -12,8 +12,8 @@ public enum ErrorType {
     ACCOUNT_NOT_ACTIVE(4100,"Hesabınız Aktif değil",HttpStatus.BAD_REQUEST),
     INVALID_CODE(4101,"Geçersiz Kod",HttpStatus.BAD_REQUEST),
     INTERNAL_ERROR(6000,"Sunucu Hatası",HttpStatus.INTERNAL_SERVER_ERROR),
-    ALREADY_ACTIVE(4200,"Hesabınız Zaten Aktif",HttpStatus.BAD_REQUEST);
-
+    ALREADY_ACTIVE(4200,"Hesabınız Zaten Aktif",HttpStatus.BAD_REQUEST),
+    PASSWORD_ERROR(4300, "Şifreler uyuşmuyor.", HttpStatus.BAD_REQUEST);
     private int code;
     private String message;
     HttpStatus httpStatus;

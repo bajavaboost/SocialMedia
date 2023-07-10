@@ -1,10 +1,9 @@
 package com.socialmedia.service;
 
-import com.socialmedia.convertor.ConvertFromDtoToAuth;
 import com.socialmedia.dto.request.ActivateRequestDto;
-import com.socialmedia.dto.request.AuthLoginRequestDto;
-import com.socialmedia.dto.request.AuthRegisterRequestDto;
-import com.socialmedia.dto.response.AuthRegisterResponseDto;
+import com.socialmedia.dto.request.LoginRequestDto;
+import com.socialmedia.dto.request.RegisterRequestDto;
+import com.socialmedia.dto.response.RegisterResponseDto;
 import com.socialmedia.exception.AuthManagerException;
 import com.socialmedia.exception.ErrorType;
 import com.socialmedia.mapper.IAuthMapper;
@@ -13,29 +12,12 @@ import com.socialmedia.repository.entity.Auth;
 import com.socialmedia.repository.enums.EStatus;
 import com.socialmedia.utility.CodeGenerator;
 import com.socialmedia.utility.ServiceManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-/*
-    Register işlemi yapalım
-    dto alsın dto dönsün
-    -->request, username, email, password
-    --> response, username, id, activationCode
-    repodan controllera kadar yazalım
-
-    login yazalım
-    username ve passsword dto alalım true ve ya false dönsün
-
-    activate status
-    --> request -> activationCode, id , kullanıcının statusunu pendingten activate çekelim
- */
 @Service
 public class AuthService extends ServiceManager<Auth, Long> {
-
-    @Autowired
     private final IAuthRepository authRepository;
 
     public AuthService(IAuthRepository authRepository) {
@@ -43,23 +25,19 @@ public class AuthService extends ServiceManager<Auth, Long> {
         this.authRepository = authRepository;
     }
 
-
-    public AuthRegisterResponseDto register(AuthRegisterRequestDto dto) {
+    public RegisterResponseDto register(RegisterRequestDto dto) {
         Auth auth = IAuthMapper.INSTANCE.fromAuthRegisterRequestDtoToAuth(dto);
-        auth.setActivationCode(CodeGenerator.generatecode());
-        try{
+        if (auth.getPassword().equals(dto.getRePassword())){
+            auth.setActivationCode(CodeGenerator.generatecode());
             save(auth);
-
-        }catch (Exception e){
-            throw new AuthManagerException(ErrorType.INTERNAL_ERROR);
+        }else {
+            throw new AuthManagerException(ErrorType.PASSWORD_ERROR);
         }
-
-        AuthRegisterResponseDto responseDto = IAuthMapper.INSTANCE.fromAuthToAuthRegisterResponseDto(auth);
+        RegisterResponseDto responseDto = IAuthMapper.INSTANCE.fromAuthToAuthRegisterResponseDto(auth);
         return responseDto;
-        //Auth auth = ConvertFromDtoToAuth.convertToAuth(dto);
     }
 
-    public Boolean login(AuthLoginRequestDto dto) {
+    public Boolean login(LoginRequestDto dto) {
         Optional<Auth> optionalAuth = authRepository.findOptionalByUsernameAndPassword(dto.getUsername(), dto.getPassword());
         if (optionalAuth.isEmpty()) {
             throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
