@@ -13,7 +13,12 @@ import javax.validation.constraints.*;
 @Data
 @Builder
 public class RegisterRequestDto {
-
+    @NotEmpty(message = "Ad alanını boş bırakmayınız.")
+    @Size(min = 3, max = 20, message = "Adınız en az 2 en fazla 20 karakter olabilir.")
+    private String name;
+    @NotEmpty(message = "Soyadı alanını boş bırakmayınız.")
+    @Size(min = 3, max = 20, message = "Soyadınız en az 2 en fazla 20 karakter olabilir.")
+    private String surname;
     @NotEmpty(message = "Kullanıcı adını boş bırakmayınız.")
     @Size(min = 3, max = 20, message = "Kullanıcı adı en az 3 en fazla 20 karakter olabilir.")
     private String username;

@@ -1,5 +1,5 @@
 
-### @Service, @Repository, @Controller, @Configuration --> @Component
+### @Service, @Repository, @Controller, (@Configuration) --> @Component
 ### @SpringBootApplication --> Component olan sınıflardan birer instance üretiyor.
 ### Ürettiği instance' ları arkada tarafta IoC Container' a uygun bir şekilde bir depoda tutuyor.
 ### Bu deponun adı --> applicationContext, SpringBootApplication, beanContainer

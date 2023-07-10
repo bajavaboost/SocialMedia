@@ -20,4 +20,13 @@ public class UserProfileController {
         return ResponseEntity.ok(userProfileService.createUser(dto));
     }
 
+    /**
+     * {
+     *   "username": "java8",
+     *   "name": "",
+     *   "surname": "",
+     *   "email": "java8@mail.com"
+     *   "password": "Arda*1234"
+     * }
+     */
 }

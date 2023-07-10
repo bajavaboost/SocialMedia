@@ -6,12 +6,14 @@ import com.socialmedia.dto.request.RegisterRequestDto;
 import com.socialmedia.dto.response.RegisterResponseDto;
 import com.socialmedia.exception.AuthManagerException;
 import com.socialmedia.exception.ErrorType;
+import com.socialmedia.manager.IUserProfileManager;
 import com.socialmedia.mapper.IAuthMapper;
 import com.socialmedia.repository.IAuthRepository;
 import com.socialmedia.repository.entity.Auth;
 import com.socialmedia.repository.enums.EStatus;
 import com.socialmedia.utility.CodeGenerator;
 import com.socialmedia.utility.ServiceManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,10 +21,12 @@ import java.util.Optional;
 @Service
 public class AuthService extends ServiceManager<Auth, Long> {
     private final IAuthRepository authRepository;
+    private final IUserProfileManager userProfileManager;
 
-    public AuthService(IAuthRepository authRepository) {
+    public AuthService(IAuthRepository authRepository, IUserProfileManager userProfileManager) {
         super(authRepository);
         this.authRepository = authRepository;
+        this.userProfileManager = userProfileManager;
     }
 
     public RegisterResponseDto register(RegisterRequestDto dto) {
@@ -30,6 +34,7 @@ public class AuthService extends ServiceManager<Auth, Long> {
         if (auth.getPassword().equals(dto.getRePassword())){
             auth.setActivationCode(CodeGenerator.generatecode());
             save(auth);
+            userProfileManager.createUser(IAuthMapper.INSTANCE.fromRegisterDtoToUserCreateDto(dto));
         }else {
             throw new AuthManagerException(ErrorType.PASSWORD_ERROR);
         }
