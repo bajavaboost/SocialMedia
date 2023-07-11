@@ -11,6 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserUpdateRequestDto {
     private String id;
+    private String username;
+    private String name;
+    private String surname;
+    private String email;
     private String avatar;
     private String phone;
     private String address;

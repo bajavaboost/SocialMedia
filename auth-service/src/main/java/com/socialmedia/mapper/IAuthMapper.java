@@ -5,6 +5,7 @@ import com.socialmedia.dto.request.UserCreateRequestDto;
 import com.socialmedia.dto.response.RegisterResponseDto;
 import com.socialmedia.repository.entity.Auth;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
@@ -16,5 +17,10 @@ public interface IAuthMapper {
 
     RegisterResponseDto fromAuthToAuthRegisterResponseDto(final Auth auth);
 
-    UserCreateRequestDto fromRegisterDtoToUserCreateDto(final RegisterRequestDto dto);
+    //AuthService --> 1. alternatif
+    //UserCreateRequestDto fromRegisterDtoToUserCreateDto(final RegisterRequestDto dto);
+
+    //AuthService --> 2. alternatif
+    @Mapping(source = "id", target = "authId")
+    UserCreateRequestDto fromRegisterDtoToUserCreateDto(final Auth auth);
 }

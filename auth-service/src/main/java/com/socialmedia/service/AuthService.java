@@ -3,6 +3,7 @@ package com.socialmedia.service;
 import com.socialmedia.dto.request.ActivateRequestDto;
 import com.socialmedia.dto.request.LoginRequestDto;
 import com.socialmedia.dto.request.RegisterRequestDto;
+import com.socialmedia.dto.request.UserCreateRequestDto;
 import com.socialmedia.dto.response.RegisterResponseDto;
 import com.socialmedia.exception.AuthManagerException;
 import com.socialmedia.exception.ErrorType;
@@ -37,7 +38,14 @@ public class AuthService extends ServiceManager<Auth, Long> {
         if (auth.getPassword().equals(dto.getRePassword())){
             auth.setActivationCode(CodeGenerator.generatecode());
             save(auth);
-            userProfileManager.createUser(IAuthMapper.INSTANCE.fromRegisterDtoToUserCreateDto(dto));
+            //39. satırdan sonra auth' un id bilgisi vardır.
+            //1. alternatif
+            /*UserCreateRequestDto userDto = IAuthMapper.INSTANCE.fromRegisterDtoToUserCreateDto(dto);
+            userDto.setAuthId(auth.getId());
+            userProfileManager.createUser(userDto);*/
+
+            //2.alternatif
+            userProfileManager.createUser(IAuthMapper.INSTANCE.fromRegisterDtoToUserCreateDto(auth));
         }else {
             throw new AuthManagerException(ErrorType.PASSWORD_ERROR);
         }

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UserCreateRequestDto {
+    Long authId;
     String name;
     String surname;
     String username;

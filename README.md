@@ -39,4 +39,8 @@
 ### 1- MongoDB denemesi için veritabanına bir kayıt yapılmalıdır. Bu işlem için DTO ve Mapper kullanınız.
 ### 2- Register işlemi auth service' den feign client aracılığıyla yapıldı. Ancak userprofile service' de kullanıcının bazı bilgileri eksiktir.
 ###    Eksik olan bilgilerin update metodu ile kullanıcıya tamamlatılması gerekmektedir. Bu işlem için gerekli metodu yazınız.
+### 3- UserProfile' da update işlemi yapıldıktan sonra burada değiştirilen verilerin de auth service' e gönderilerek update edilmesi gerekmektedir.
+###    Bunun için UserprofileService' den AuthService' e bir manager yazılmalıdır. Ancak userprofile' dan auth' a veriyi gönderirken eşleştirme yapabilmek için
+###    bazı ek property'lere ihtiyaç vardır. UserProfile' da ve Auth' da gelen giden verilerde değişiklik yapmak gerekebilir.
+###    Bu işlem için gerekli manager ve service metotlarını yazınız.
 
