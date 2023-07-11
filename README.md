@@ -14,10 +14,6 @@
 #### Autowired nedir? Neden cons inj. neden autowired?
 #### SpringFramework vs SpringBoot?
 #### SOLID prensipleri nelerdir?
-# -----------------------------------------------------------------------------------------
-
-## UserProfileService
-### 1- MongoDB denemesi için veritabanına bir kayıt yapılmalıdır. Bu işlem için DTO ve Mapper kullanınız.
 
 
 ## Http Request - JavaServlet Container
@@ -36,3 +32,11 @@
 ### HttpClient --> Basic Http Request --> Temel olarak RestTemplate ile aynı işi yapar.
 ### FeignClient --> Daha çok iki servis arasındaki isteklerde kullanılır. Yani microservice'ler arasındaki istekler için kullanılır.
 ### FeignClient, Spring Cloud ailesinin bir üyesidir. ve clouddaki uygulamada daha efektif ve etkin çalışabilir. Bu yüzden tercih edilir.
+
+# -----------------------------------------------------------------------------------------
+
+## UserProfileService
+### 1- MongoDB denemesi için veritabanına bir kayıt yapılmalıdır. Bu işlem için DTO ve Mapper kullanınız.
+### 2- Register işlemi auth service' den feign client aracılığıyla yapıldı. Ancak userprofile service' de kullanıcının bazı bilgileri eksiktir.
+###    Eksik olan bilgilerin update metodu ile kullanıcıya tamamlatılması gerekmektedir. Bu işlem için gerekli metodu yazınız.
+

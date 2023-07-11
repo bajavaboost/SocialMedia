@@ -15,6 +15,7 @@ import com.socialmedia.utility.CodeGenerator;
 import com.socialmedia.utility.ServiceManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -29,6 +30,8 @@ public class AuthService extends ServiceManager<Auth, Long> {
         this.userProfileManager = userProfileManager;
     }
 
+    @Transactional //rolback --> Bir metodun veya metotları içeren bir sınıfın işlemlerini veritabanı üzerinde otomatik olarak
+                               //yönetmek için kullanılır.
     public RegisterResponseDto register(RegisterRequestDto dto) {
         Auth auth = IAuthMapper.INSTANCE.fromAuthRegisterRequestDtoToAuth(dto);
         if (auth.getPassword().equals(dto.getRePassword())){
