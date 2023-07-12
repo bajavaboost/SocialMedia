@@ -1,5 +1,6 @@
 package com.socialmedia.mapper;
 
+import com.socialmedia.dto.request.AuthUpdateRequestDto;
 import com.socialmedia.dto.request.UserCreateRequestDto;
 import com.socialmedia.dto.request.UserUpdateRequestDto;
 import com.socialmedia.repository.entity.UserProfile;
@@ -17,4 +18,6 @@ public interface IUserProfileMapper {
     //bunların veri tabanına null olarak kaydedilmemesini sağlar.
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     UserProfile fromUpdateDtoToUserProfile(UserUpdateRequestDto dto, @MappingTarget UserProfile userProfile);
+
+    AuthUpdateRequestDto fromUserProfileToAuthUpdateDto(UserProfile userProfile);
 }

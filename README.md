@@ -33,7 +33,7 @@
 ### FeignClient --> Daha çok iki servis arasındaki isteklerde kullanılır. Yani microservice'ler arasındaki istekler için kullanılır.
 ### FeignClient, Spring Cloud ailesinin bir üyesidir. ve clouddaki uygulamada daha efektif ve etkin çalışabilir. Bu yüzden tercih edilir.
 
-# -----------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------------
 
 ## UserProfileService
 ### 1- MongoDB denemesi için veritabanına bir kayıt yapılmalıdır. Bu işlem için DTO ve Mapper kullanınız.

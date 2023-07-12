@@ -18,6 +18,7 @@ public class UserProfile extends BaseEntity{
 
     @Id
     private String id;
+    private Long authId;
     private String username;
     private String name;
     private String surname;
