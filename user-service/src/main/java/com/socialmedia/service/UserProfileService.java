@@ -32,7 +32,8 @@ public class UserProfileService extends ServiceManager<UserProfile, String> {
         if (userProfile.isPresent()){
             userProfileRepository.save(IUserProfileMapper.INSTANCE.fromUpdateDtoToUserProfile(dto,userProfile.get()));
             //33. satırdan sonra 'userProfile' nesnesi güncel haliyle bulunmaktadır
-            authManager.updateAuth(IUserProfileMapper.INSTANCE.fromUserProfileToAuthUpdateDto(userProfile.get()));
+            AuthUpdateRequestDto authUpdateRequestDto = IUserProfileMapper.INSTANCE.fromUserProfileToAuthUpdateDto(userProfile.get());
+            authManager.updateAuth(authUpdateRequestDto);
             return true;
         }
         throw new RuntimeException("Hata");

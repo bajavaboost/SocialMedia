@@ -1,9 +1,6 @@
 package com.socialmedia.service;
 
-import com.socialmedia.dto.request.ActivateRequestDto;
-import com.socialmedia.dto.request.LoginRequestDto;
-import com.socialmedia.dto.request.RegisterRequestDto;
-import com.socialmedia.dto.request.UserCreateRequestDto;
+import com.socialmedia.dto.request.*;
 import com.socialmedia.dto.response.RegisterResponseDto;
 import com.socialmedia.exception.AuthManagerException;
 import com.socialmedia.exception.ErrorType;
@@ -15,6 +12,7 @@ import com.socialmedia.repository.enums.EStatus;
 import com.socialmedia.utility.CodeGenerator;
 import com.socialmedia.utility.ServiceManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,6 +77,15 @@ public class AuthService extends ServiceManager<Auth, Long> {
         }else {
             throw new AuthManagerException(ErrorType.INVALID_CODE);
         }
+    }
+
+    public Boolean updateAuth(AuthUpdateRequestDto dto){
+        Optional<Auth> auth = authRepository.findById(dto.getAuthId());
+        if (auth.isPresent()){
+            save(IAuthMapper.INSTANCE.fromAuthUpdateDtoToAuth(dto, auth.get()));
+            return true;
+        }
+        throw new RuntimeException("Hata");
     }
 }
 
