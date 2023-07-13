@@ -11,8 +11,6 @@ import com.socialmedia.repository.entity.Auth;
 import com.socialmedia.repository.enums.EStatus;
 import com.socialmedia.utility.CodeGenerator;
 import com.socialmedia.utility.ServiceManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,7 +73,7 @@ public class AuthService extends ServiceManager<Auth, Long> {
             update(optionalAuth.get());
             return true;
         }else {
-            throw new AuthManagerException(ErrorType.INVALID_CODE);
+            throw new AuthManagerException(ErrorType.ACTIVATE_CODE_ERROR);
         }
     }
 
