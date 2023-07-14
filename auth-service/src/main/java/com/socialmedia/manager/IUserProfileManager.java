@@ -17,13 +17,4 @@ public interface IUserProfileManager {
     @PostMapping("/create-user") //http://localhost:8080/user-profile/create-user
     public ResponseEntity<Boolean> createUser(@RequestBody UserCreateRequestDto dto);
 
-    /**
-     * {
-     *   "name" : "java8",
-     *   "surname": "java8",
-     *   "username": "java8",
-     *   "email": "java8@mail.com",
-     *   "password": "Arda*1234"
-     * }
-     */
 }

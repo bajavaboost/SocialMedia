@@ -44,4 +44,5 @@
 ###    Bunun için UserprofileService' den AuthService' e bir manager yazılmalıdır. Ancak userprofile' dan auth' a veriyi gönderirken eşleştirme yapabilmek için
 ###    bazı ek property'lere ihtiyaç vardır. UserProfile' da ve Auth' da gelen giden verilerde değişiklik yapmak gerekebilir.
 ###    Bu işlem için gerekli manager ve service metotlarını yazınız.
+### 4- ConfigServer adında bir modül oluşturarak service .yml dosylarının konfigürasyonunu tamamlayınız.
 

@@ -21,6 +21,10 @@ ext {
             //mongoDB
             mongoDB             : "org.springframework.boot:spring-boot-starter-data-mongodb:${versions.springBoot}",
             //feignClient
-            springOpenFeign     : "org.springframework.cloud:spring-cloud-starter-openfeign:${versions.springCloud}"
+            springOpenFeign     : "org.springframework.cloud:spring-cloud-starter-openfeign:${versions.springCloud}",
+            //config-server
+            springCloudConfigServer     : "org.springframework.cloud:spring-cloud-config-server:$versions.springCloud",
+            springCloudConfigStarter    : "org.springframework.cloud:spring-cloud-starter-config:$versions.springCloud",
+            springCloudConfigClient     : "org.springframework.cloud:spring-cloud-config-client:$versions.springCloud",
     ]
 }
