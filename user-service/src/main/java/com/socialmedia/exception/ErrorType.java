@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ErrorType {
-    //Auth Service ERROR
+    //UserProfile Service ERROR
     BAD_REQUEST(4000, "Parametre hatası", HttpStatus.BAD_REQUEST),
     VALIDATION_ERROR(3000, "Validasyon hatası", HttpStatus.BAD_REQUEST),
     LOGIN_ERROR(4001, "Kullanıcı adı veya şifre hatalı", HttpStatus.BAD_REQUEST),

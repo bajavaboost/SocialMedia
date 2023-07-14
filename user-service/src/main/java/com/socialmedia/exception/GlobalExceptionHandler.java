@@ -25,9 +25,9 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
-    @ExceptionHandler(AuthManagerException.class)
+    @ExceptionHandler(UserProfileManagerException.class)
     @ResponseBody //JSON veya XML verilerin dönüşlerinin nasıl olacağını belirtir
-    public ResponseEntity<ErrorMessage> handleManagerException(AuthManagerException exception){
+    public ResponseEntity<ErrorMessage> handleManagerException(UserProfileManagerException exception){
         ErrorType errorType = exception.getErrorType();
         HttpStatus httpStatus = errorType.httpStatus;
         return new ResponseEntity<>(createError(errorType,exception),httpStatus);

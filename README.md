@@ -14,7 +14,8 @@
 #### Autowired nedir? Neden cons inj. neden autowired?
 #### SpringFramework vs SpringBoot?
 #### SOLID prensipleri nelerdir?
-
+#### RestAPI nedir? RESTful arch nedir?
+### SOAP --> AP --> Access Protocol --> xml tabanlı veriler
 
 ## Http Request - JavaServlet Container
 ### Javada web işlemlerinde her şey http üzerinden yapılır ve temel olarak request <--> response şeklinde veri taşınır.

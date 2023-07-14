@@ -16,7 +16,6 @@ public class ServiceManager <T extends BaseEntity,ID> implements IService<T,ID>{
     public T save(T t) {
         t.setCreateDate(System.currentTimeMillis());
         t.setUpdateDate(System.currentTimeMillis());
-
         return repository.save(t);
     }
 

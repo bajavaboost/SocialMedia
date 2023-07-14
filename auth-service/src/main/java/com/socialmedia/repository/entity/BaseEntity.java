@@ -16,6 +16,8 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public class BaseEntity {
 
-    private Long createDate;
-    private Long updateDate;
+    @Builder.Default
+    private Long createDate = System.currentTimeMillis();
+    @Builder.Default
+    private Long updateDate = System.currentTimeMillis();
 }

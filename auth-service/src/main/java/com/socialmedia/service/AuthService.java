@@ -33,7 +33,8 @@ public class AuthService extends ServiceManager<Auth, Long> {
         Auth auth = IAuthMapper.INSTANCE.fromAuthRegisterRequestDtoToAuth(dto);
         if (auth.getPassword().equals(dto.getRePassword())){
             auth.setActivationCode(CodeGenerator.generatecode());
-            save(auth);
+            authRepository.save(auth);
+            //save(auth);
             //39. satırdan sonra auth' un id bilgisi vardır.
             //1. alternatif
             /*UserCreateRequestDto userDto = IAuthMapper.INSTANCE.fromRegisterDtoToUserCreateDto(dto);

@@ -1,4 +1,4 @@
-package com.socialmedia.convertor;
+package com.socialmedia.converter;
 
 import com.socialmedia.dto.request.RegisterRequestDto;
 import com.socialmedia.repository.entity.Auth;

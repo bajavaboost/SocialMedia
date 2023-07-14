@@ -7,13 +7,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.socialmedia.constant.ApiUrls.*;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user-profile")
+@RequestMapping(USER_PROFILE)
 public class UserProfileController {
     private final UserProfileService userProfileService;
 
-    @PostMapping("/create-user")
+    @PostMapping(CREATE_USER)
     public ResponseEntity<Boolean> createUser(@RequestBody UserCreateRequestDto dto){
         return ResponseEntity.ok(userProfileService.createUser(dto));
     }
@@ -27,7 +29,7 @@ public class UserProfileController {
     //Genellikle PostMapping --> veri kaydetme, veri tabanında değişiklik yapma işlemlerinde,
     //           PutMapping --> veri tabanındaki varolan veriyi değiştirme(update) işlemlerinde,
     //           DeleteMapping --> silme işlemlerinde kullanılır.
-    @PutMapping("/update")
+    @PutMapping(UPDATE)
     public ResponseEntity<Boolean> updateUser(@RequestBody UserUpdateRequestDto dto){
         return ResponseEntity.ok(userProfileService.updateUser(dto));
     }
