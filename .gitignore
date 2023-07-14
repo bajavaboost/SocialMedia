@@ -2,5 +2,5 @@
 /.gradle/
 /auth-service/build/
 /auth-service/build/classes/java/main/
-/user-service/build/
-/user-service/build/classes/java/main/
+/userprofile-service/build/
+/userprofile-service/build/classes/java/main/

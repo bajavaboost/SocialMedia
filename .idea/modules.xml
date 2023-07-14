@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/auth-service/SocialMedia-Java8.auth-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/auth-service/SocialMedia-Java8.auth-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/config-server/SocialMedia-Java8.config-server.main.iml" filepath="$PROJECT_DIR$/.idea/modules/config-server/SocialMedia-Java8.config-server.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/userprofile-service/SocialMedia-Java8.userprofile-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/userprofile-service/SocialMedia-Java8.userprofile-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/auth-service/SocialMediaProject.auth-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/auth-service/SocialMediaProject.auth-service.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/config-server/SocialMediaProject.config-server.main.iml" filepath="$PROJECT_DIR$/.idea/modules/config-server/SocialMediaProject.config-server.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/user-service/SocialMediaProject.user-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/user-service/SocialMediaProject.user-service.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/auth-service/com.socialmedia.SocialMediaProject.auth-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/auth-service/com.socialmedia.SocialMediaProject.auth-service.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/user-service/com.socialmedia.SocialMediaProject.user-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/user-service/com.socialmedia.SocialMediaProject.user-service.main.iml" />
     </modules>
   </component>
 </project>

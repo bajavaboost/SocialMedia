@@ -1,6 +1,6 @@
-rootProject.name = 'SocialMediaProject'
+rootProject.name = 'SocialMedia-Java8'
 include 'auth-service'
-include 'user-service'
+include 'userprofile-service'
 include 'mail-service'
 include 'post-service'
 include 'config-server'

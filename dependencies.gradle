@@ -26,5 +26,8 @@ ext {
             springCloudConfigServer     : "org.springframework.cloud:spring-cloud-config-server:$versions.springCloud",
             springCloudConfigStarter    : "org.springframework.cloud:spring-cloud-starter-config:$versions.springCloud",
             springCloudConfigClient     : "org.springframework.cloud:spring-cloud-config-client:$versions.springCloud",
+            //zipkin
+            springCloudSleuthZipkin: "org.springframework.cloud:spring-cloud-sleuth-zipkin:$versions.springCloud",
+            springCloudSleuth: "org.springframework.cloud:spring-cloud-starter-sleuth:$versions.springCloud",
     ]
 }

@@ -58,4 +58,9 @@ public class AuthController {
     public ResponseEntity<List<Auth>> findAll(){
         return ResponseEntity.ok(authService.findAll());
     }
+
+    @DeleteMapping(DELETE)
+    public ResponseEntity<Boolean> delete(Long id){
+        return ResponseEntity.ok(authService.delete(id));
+    }
 }

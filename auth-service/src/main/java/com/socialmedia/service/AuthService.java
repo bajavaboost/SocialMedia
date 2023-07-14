@@ -86,6 +86,23 @@ public class AuthService extends ServiceManager<Auth, Long> {
         }
         throw new RuntimeException("Hata");
     }
+
+    public Boolean delete(Long id){
+        Optional<Auth> auth = authRepository.findById(id);
+        //optional nesnesinin aşağıdaki iki kontrolü de kullanılır ve aynıdır
+        auth.orElseThrow(() -> {throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
+        });
+        /*if (auth.isEmpty()){
+            throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
+        }*/
+        if (auth.get().getStatus().equals(EStatus.ACTIVE) || auth.get().getStatus().equals(EStatus.PENDING)){
+            auth.get().setStatus(EStatus.DELETED);
+            update(auth.get());
+            return true;
+        }else {
+            throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
+        }
+    }
 }
 
 
