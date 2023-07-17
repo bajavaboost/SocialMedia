@@ -12,6 +12,7 @@ import com.socialmedia.repository.entity.UserProfile;
 import com.socialmedia.repository.enums.EStatus;
 import com.socialmedia.utility.ServiceManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -30,6 +31,7 @@ public class UserProfileService extends ServiceManager<UserProfile, String> {
         return true;
     }
 
+    @Transactional
     public Boolean updateUser(UserUpdateRequestDto dto){
         Optional<UserProfile> userProfile = userProfileRepository.findById(dto.getId());
         if (userProfile.isPresent()){
@@ -47,6 +49,15 @@ public class UserProfileService extends ServiceManager<UserProfile, String> {
         userProfile.orElseThrow(() -> {throw new UserProfileManagerException(ErrorType.USER_NOT_FOUND);});
 
         userProfile.get().setStatus(EStatus.DELETED);
+        update(userProfile.get());
+        return true;
+    }
+
+    public Boolean activateStatus(Long authId){
+        Optional<UserProfile> userProfile = userProfileRepository.findOptionalByAuthId(authId);
+        userProfile.orElseThrow(() -> {throw new UserProfileManagerException(ErrorType.USER_NOT_FOUND);});
+
+        userProfile.get().setStatus(EStatus.ACTIVE);
         update(userProfile.get());
         return true;
     }

@@ -21,4 +21,7 @@ public interface IUserProfileManager {
     @DeleteMapping("/delete-by-id/{authId}")
     public ResponseEntity<Boolean> deleteUser(@PathVariable Long authId);
 
+    @PutMapping("/activate-status/{authId}")
+    public ResponseEntity<Boolean> activateStatus(@PathVariable Long authId);
+
 }

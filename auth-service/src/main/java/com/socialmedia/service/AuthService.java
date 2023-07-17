@@ -28,7 +28,7 @@ public class AuthService extends ServiceManager<Auth, Long> {
     }
 
     @Transactional //rolback --> Bir metodun veya metotları içeren bir sınıfın işlemlerini veritabanı üzerinde otomatik olarak
-                               //yönetmek için kullanılır.
+                               //yönetmek için kullanılır. Yalnızca Post, Put,Delete' de kullanılır.
     public RegisterResponseDto register(RegisterRequestDto dto) {
         Auth auth = IAuthMapper.INSTANCE.fromAuthRegisterRequestDtoToAuth(dto);
         if (auth.getPassword().equals(dto.getRePassword())){
@@ -61,6 +61,7 @@ public class AuthService extends ServiceManager<Auth, Long> {
         return true;
     }
 
+    @Transactional
     public Boolean activateStatus(ActivateRequestDto dto) {
         Optional<Auth> optionalAuth = findById(dto.getId());
         if (optionalAuth.isEmpty()){
@@ -69,15 +70,21 @@ public class AuthService extends ServiceManager<Auth, Long> {
         if(optionalAuth.get().getStatus().equals(EStatus.ACTIVE)){
             throw new AuthManagerException(ErrorType.ALREADY_ACTIVE);
         }
+        if (!optionalAuth.get().getStatus().equals(EStatus.PENDING)){
+            throw new AuthManagerException(ErrorType.USER_ACCESS_ERROR);
+        }
         if(dto.getActivationCode().equals(optionalAuth.get().getActivationCode())){
             optionalAuth.get().setStatus(EStatus.ACTIVE);
             update(optionalAuth.get());
+            //userprofilemanager
+            userProfileManager.activateStatus(optionalAuth.get().getId());
             return true;
         }else {
             throw new AuthManagerException(ErrorType.ACTIVATE_CODE_ERROR);
         }
     }
 
+    //userprofile --> openfeign
     public Boolean updateAuth(AuthUpdateRequestDto dto){
         Optional<Auth> auth = authRepository.findById(dto.getAuthId());
         if (auth.isPresent()){
@@ -87,6 +94,7 @@ public class AuthService extends ServiceManager<Auth, Long> {
         throw new RuntimeException("Hata");
     }
 
+    @Transactional
     public Boolean delete(Long id){
         Optional<Auth> auth = authRepository.findById(id);
         //optional nesnesinin aşağıdaki iki kontrolü de kullanılır ve aynıdır

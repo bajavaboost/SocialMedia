@@ -37,4 +37,9 @@ public class UserProfileController {
     public ResponseEntity<Boolean> deleteUser(@PathVariable Long authId){
         return ResponseEntity.ok(userProfileService.deleteById(authId));
     }
+
+    @PutMapping("/activate-status/{authId}")
+    public ResponseEntity<Boolean> activateStatus(@PathVariable Long authId){
+        return ResponseEntity.ok(userProfileService.activateStatus(authId));
+    }
 }
