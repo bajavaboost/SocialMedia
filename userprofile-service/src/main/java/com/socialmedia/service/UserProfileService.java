@@ -3,10 +3,13 @@ package com.socialmedia.service;
 import com.socialmedia.dto.request.AuthUpdateRequestDto;
 import com.socialmedia.dto.request.UserCreateRequestDto;
 import com.socialmedia.dto.request.UserUpdateRequestDto;
+import com.socialmedia.exception.ErrorType;
+import com.socialmedia.exception.UserProfileManagerException;
 import com.socialmedia.manager.IAuthManager;
 import com.socialmedia.mapper.IUserProfileMapper;
 import com.socialmedia.repository.IUserProfileRepository;
 import com.socialmedia.repository.entity.UserProfile;
+import com.socialmedia.repository.enums.EStatus;
 import com.socialmedia.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
@@ -37,5 +40,14 @@ public class UserProfileService extends ServiceManager<UserProfile, String> {
             return true;
         }
         throw new RuntimeException("Hata");
+    }
+
+    public Boolean deleteById(Long authId){
+        Optional<UserProfile> userProfile = userProfileRepository.findOptionalByAuthId(authId);
+        userProfile.orElseThrow(() -> {throw new UserProfileManagerException(ErrorType.USER_NOT_FOUND);});
+
+        userProfile.get().setStatus(EStatus.DELETED);
+        update(userProfile.get());
+        return true;
     }
 }

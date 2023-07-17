@@ -98,6 +98,8 @@ public class AuthService extends ServiceManager<Auth, Long> {
         if (auth.get().getStatus().equals(EStatus.ACTIVE) || auth.get().getStatus().equals(EStatus.PENDING)){
             auth.get().setStatus(EStatus.DELETED);
             update(auth.get());
+            //userprofilemanager
+            userProfileManager.deleteUser(auth.get().getId());
             return true;
         }else {
             throw new AuthManagerException(ErrorType.USER_NOT_FOUND);

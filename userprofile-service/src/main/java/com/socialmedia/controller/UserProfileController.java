@@ -33,4 +33,8 @@ public class UserProfileController {
     public ResponseEntity<Boolean> updateUser(@RequestBody UserUpdateRequestDto dto){
         return ResponseEntity.ok(userProfileService.updateUser(dto));
     }
+    @DeleteMapping("/delete-by-id/{authId}")
+    public ResponseEntity<Boolean> deleteUser(@PathVariable Long authId){
+        return ResponseEntity.ok(userProfileService.deleteById(authId));
+    }
 }
