@@ -1,6 +1,7 @@
 package com.socialmedia.manager;
 
 import com.socialmedia.dto.request.UserCreateRequestDto;
+import com.socialmedia.dto.request.UserSetPasswordRequestDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,4 +25,6 @@ public interface IUserProfileManager {
     @PutMapping("/activate-status/{authId}")
     public ResponseEntity<Boolean> activateStatus(@PathVariable Long authId);
 
+    @PutMapping("/forgot-password")
+    public ResponseEntity<Boolean> forgotPassword(@RequestBody UserSetPasswordRequestDto dto);
 }

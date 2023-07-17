@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AuthService extends ServiceManager<Auth, Long> {
@@ -50,6 +51,7 @@ public class AuthService extends ServiceManager<Auth, Long> {
         return responseDto;
     }
 
+    //TODO by Arda --> Login işlemi şu an username üzerinden yapılmaktadır. Bu işlem email ile değiştirilecektir.
     public Boolean login(LoginRequestDto dto) {
         Optional<Auth> optionalAuth = authRepository.findOptionalByUsernameAndPassword(dto.getUsername(), dto.getPassword());
         if (optionalAuth.isEmpty()) {
@@ -112,6 +114,24 @@ public class AuthService extends ServiceManager<Auth, Long> {
         }else {
             throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
         }
+    }
+
+    public String forgotPassword(ForgotPasswordRequestDto dto){
+        Optional<Auth> auth = authRepository.findOptionalByEmail(dto.getEmail());
+        if (auth.isPresent() && auth.get().getStatus().equals(EStatus.ACTIVE)){
+            //random password
+            String randomPassword = UUID.randomUUID().toString();
+            auth.get().setPassword(randomPassword);
+            save(auth.get());
+            //userprofilemanager
+            UserSetPasswordRequestDto userProfileDto = UserSetPasswordRequestDto.builder()
+                    .authId(auth.get().getId())
+                    .password(auth.get().getPassword())
+                    .build();
+            userProfileManager.forgotPassword(userProfileDto);
+            return "Yeni şifreniz: " + auth.get().getPassword();
+        }
+        throw new AuthManagerException(ErrorType.ACCOUNT_NOT_ACTIVE);
     }
 }
 

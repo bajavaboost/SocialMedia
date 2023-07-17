@@ -2,6 +2,7 @@ package com.socialmedia.service;
 
 import com.socialmedia.dto.request.AuthUpdateRequestDto;
 import com.socialmedia.dto.request.UserCreateRequestDto;
+import com.socialmedia.dto.request.UserSetPasswordRequestDto;
 import com.socialmedia.dto.request.UserUpdateRequestDto;
 import com.socialmedia.exception.ErrorType;
 import com.socialmedia.exception.UserProfileManagerException;
@@ -58,6 +59,16 @@ public class UserProfileService extends ServiceManager<UserProfile, String> {
         userProfile.orElseThrow(() -> {throw new UserProfileManagerException(ErrorType.USER_NOT_FOUND);});
 
         userProfile.get().setStatus(EStatus.ACTIVE);
+        update(userProfile.get());
+        return true;
+    }
+
+    public Boolean forgotPassword(UserSetPasswordRequestDto dto){
+        Optional<UserProfile> userProfile = userProfileRepository.findOptionalByAuthId(dto.getAuthId());
+        if (userProfile.isEmpty()){
+            throw new UserProfileManagerException(ErrorType.USER_NOT_FOUND);
+        }
+        userProfile.get().setPassword(dto.getPassword());
         update(userProfile.get());
         return true;
     }

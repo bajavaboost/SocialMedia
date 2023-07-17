@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Getter
 @RequiredArgsConstructor
-public class ServiceManager <T extends BaseEntity,ID> implements IService<T,ID>{
+public class ServiceManager <T extends BaseEntity,ID> implements IService<T,ID> {
     private final JpaRepository<T,ID> repository;
     @Override
     public T save(T t) {

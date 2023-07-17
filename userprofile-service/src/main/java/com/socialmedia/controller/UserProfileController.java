@@ -1,6 +1,7 @@
 package com.socialmedia.controller;
 
 import com.socialmedia.dto.request.UserCreateRequestDto;
+import com.socialmedia.dto.request.UserSetPasswordRequestDto;
 import com.socialmedia.dto.request.UserUpdateRequestDto;
 import com.socialmedia.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
@@ -41,5 +42,10 @@ public class UserProfileController {
     @PutMapping("/activate-status/{authId}")
     public ResponseEntity<Boolean> activateStatus(@PathVariable Long authId){
         return ResponseEntity.ok(userProfileService.activateStatus(authId));
+    }
+
+    @PutMapping("/forgot-password")
+    public ResponseEntity<Boolean> forgotPassword(@RequestBody UserSetPasswordRequestDto dto){
+        return ResponseEntity.ok(userProfileService.forgotPassword(dto));
     }
 }

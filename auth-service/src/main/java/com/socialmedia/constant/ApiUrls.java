@@ -13,4 +13,5 @@ public class ApiUrls {
     public static final String FIND_ALL = "/find-all";
     public static final String ACTIVATE_STATUS = "/activate-status";
     public static final String DELETE = "/delete";
+    public static final String FORGOT_PASSWORD = "/forgot-password";
 }
