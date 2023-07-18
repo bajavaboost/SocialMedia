@@ -51,8 +51,10 @@ public class AuthService extends ServiceManager<Auth, Long> {
         return responseDto;
     }
 
+
+
     //TODO by Arda --> Login işlemi şu an username üzerinden yapılmaktadır. Bu işlem email ile değiştirilecektir.
-    public Boolean login(LoginRequestDto dto) {
+    public Boolean login(LoginRequestDto dto) { //OTP service
         Optional<Auth> optionalAuth = authRepository.findOptionalByUsernameAndPassword(dto.getUsername(), dto.getPassword());
         if (optionalAuth.isEmpty()) {
             throw new AuthManagerException(ErrorType.USER_NOT_FOUND);

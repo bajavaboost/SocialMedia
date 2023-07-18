@@ -60,5 +60,7 @@
 ### 8- AuthService' de forgotPassword
     Kullanıcı sisteme giriş yapmak için kullandığı şifresini unutabilir. Bu şifreyi istediği zaman sıfırlayabilmelidir.
     Bunun için forgotPassword adında bir metot yazınız. Bu şifre değişikliğini UserProfile Service' e de gönderiniz.
-
+### 9- Register işleminin RabbitMQ ile yapılması
+    AuthService' de rabbitmq kullanabilmek için gerekli katmanların oluşturularak servis metoduna producer sınıfının çağırılması gerekmektedir.
+    config --> rabbitmq.model --> rabbitmq.producer sıralaması ile katmanları doldurunuz.
 
