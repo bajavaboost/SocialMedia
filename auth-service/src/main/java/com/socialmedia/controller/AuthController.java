@@ -22,6 +22,11 @@ public class AuthController {
     public ResponseEntity<RegisterResponseDto> register(@RequestBody @Valid RegisterRequestDto dto){
         return ResponseEntity.ok(authService.register(dto));
     }
+
+    @PostMapping(REGISTER + "-with-rabbitmq") //register-with-rabbitmq
+    public ResponseEntity<RegisterResponseDto> registerWithRabbitMQ(@RequestBody @Valid RegisterRequestDto dto){
+        return ResponseEntity.ok(authService.registerWithRabbitMQ(dto));
+    }
     @PostMapping(LOGIN)
     public ResponseEntity<Boolean> login(@RequestBody LoginRequestDto dto){
         return ResponseEntity.ok(authService.login(dto));

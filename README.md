@@ -63,4 +63,5 @@
 ### 9- Register işleminin RabbitMQ ile yapılması
     AuthService' de rabbitmq kullanabilmek için gerekli katmanların oluşturularak servis metoduna producer sınıfının çağırılması gerekmektedir.
     config --> rabbitmq.model --> rabbitmq.producer sıralaması ile katmanları doldurunuz.
-
+### 10- ForgotPassword işleminin RabbitMq ile yapılması
+    Auth forgot password metodunu rabbitmq ile userprofile service' e aktarınız.

@@ -14,3 +14,8 @@ spring:
       database: java8SocialMedia
       username: Java8User
       password: root
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: java8
+    password: root

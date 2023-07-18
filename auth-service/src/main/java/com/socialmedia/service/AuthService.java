@@ -6,6 +6,7 @@ import com.socialmedia.exception.AuthManagerException;
 import com.socialmedia.exception.ErrorType;
 import com.socialmedia.manager.IUserProfileManager;
 import com.socialmedia.mapper.IAuthMapper;
+import com.socialmedia.rabbitmq.producer.UserRegisterProducer;
 import com.socialmedia.repository.IAuthRepository;
 import com.socialmedia.repository.entity.Auth;
 import com.socialmedia.repository.enums.EStatus;
@@ -21,11 +22,13 @@ import java.util.UUID;
 public class AuthService extends ServiceManager<Auth, Long> {
     private final IAuthRepository authRepository;
     private final IUserProfileManager userProfileManager;
+    private final UserRegisterProducer userRegisterProducer;
 
-    public AuthService(IAuthRepository authRepository, IUserProfileManager userProfileManager) {
+    public AuthService(IAuthRepository authRepository, IUserProfileManager userProfileManager, UserRegisterProducer userRegisterProducer) {
         super(authRepository);
         this.authRepository = authRepository;
         this.userProfileManager = userProfileManager;
+        this.userRegisterProducer = userRegisterProducer;
     }
 
     @Transactional //rolback --> Bir metodun veya metotları içeren bir sınıfın işlemlerini veritabanı üzerinde otomatik olarak
@@ -51,6 +54,18 @@ public class AuthService extends ServiceManager<Auth, Long> {
         return responseDto;
     }
 
+    public RegisterResponseDto registerWithRabbitMQ(RegisterRequestDto dto) {
+        Auth auth = IAuthMapper.INSTANCE.fromAuthRegisterRequestDtoToAuth(dto);
+        if (auth.getPassword().equals(dto.getRePassword())){
+            auth.setActivationCode(CodeGenerator.generatecode());
+            authRepository.save(auth);
+            userRegisterProducer.sendNewUser(IAuthMapper.INSTANCE.fromAuthToUserRegisterModel(auth));
+        }else {
+            throw new AuthManagerException(ErrorType.PASSWORD_ERROR);
+        }
+        RegisterResponseDto responseDto = IAuthMapper.INSTANCE.fromAuthToAuthRegisterResponseDto(auth);
+        return responseDto;
+    }
 
 
     //TODO by Arda --> Login işlemi şu an username üzerinden yapılmaktadır. Bu işlem email ile değiştirilecektir.
