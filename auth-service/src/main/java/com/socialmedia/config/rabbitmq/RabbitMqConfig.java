@@ -35,4 +35,17 @@ public class RabbitMqConfig {
     public Binding userRegisterBinding(final Queue userRegisterQueue, final DirectExchange authExchange){
         return BindingBuilder.bind(userRegisterQueue).to(authExchange).with(userRegisterBinding);
     }
+
+    //Mail sender register producer
+    private String mailRegisterQueue = "mail-register-queue";
+    private String mailRegisterBinding = "mail-register-binding";
+
+    @Bean
+    Queue mailRegisterQueue(){
+        return new Queue(mailRegisterQueue);
+    }
+    @Bean
+    public Binding mailRegisterBinding(final Queue mailRegisterQueue, final DirectExchange authExchange){
+        return BindingBuilder.bind(mailRegisterQueue).to(authExchange).with(mailRegisterBinding);
+    }
 }

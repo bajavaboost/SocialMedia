@@ -1,6 +1,6 @@
 package com.socialmedia.rabbitmq.consumer;
 
-import com.socialmedia.rabbitmq.model.AuthRegisterModel;
+import com.socialmedia.rabbitmq.model.UserRegisterModel;
 import com.socialmedia.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -12,7 +12,7 @@ public class AuthRegisterConsumer {
     private final UserProfileService userProfileService;
 
     @RabbitListener(queues = ("user-register-queue"))
-    public void newUserCreate(AuthRegisterModel model){
+    public void newUserCreate(UserRegisterModel model){
         userProfileService.createUserWithRabbitMq(model);
     }
 }

@@ -3,7 +3,7 @@ package com.socialmedia.mapper;
 import com.socialmedia.dto.request.AuthUpdateRequestDto;
 import com.socialmedia.dto.request.UserCreateRequestDto;
 import com.socialmedia.dto.request.UserUpdateRequestDto;
-import com.socialmedia.rabbitmq.model.AuthRegisterModel;
+import com.socialmedia.rabbitmq.model.UserRegisterModel;
 import com.socialmedia.repository.entity.UserProfile;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
@@ -13,7 +13,7 @@ public interface IUserProfileMapper {
     IUserProfileMapper INSTANCE = Mappers.getMapper(IUserProfileMapper.class);
 
     UserProfile fromCreateDtoToUserProfile(UserCreateRequestDto dto);
-    UserProfile fromRegisterModelToUserProfile(AuthRegisterModel model);
+    UserProfile fromRegisterModelToUserProfile(UserRegisterModel model);
     //BeanMapping, NullValuePropertyMappingStrategy parametresi sayesinde null olarak gönderilen verileri dikkate almaz.
     //Yani update işlemi yapılırken update etmek istemediğiniz property'leri swagger' da sildiğinizde null olacakları için,
     //bunların veri tabanına null olarak kaydedilmemesini sağlar.

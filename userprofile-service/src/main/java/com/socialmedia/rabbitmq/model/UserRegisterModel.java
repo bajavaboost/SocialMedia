@@ -11,7 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AuthRegisterModel implements Serializable {
+public class UserRegisterModel implements Serializable {
     private Long authId;
     private String username;
     private String name;

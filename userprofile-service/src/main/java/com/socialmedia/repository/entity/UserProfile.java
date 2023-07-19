@@ -9,12 +9,14 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @SuperBuilder
 @Document
-public class UserProfile extends BaseEntity{
+public class UserProfile extends BaseEntity {
 
     @Id
     private String id;

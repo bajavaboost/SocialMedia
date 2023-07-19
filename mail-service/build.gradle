@@ -1,19 +1,10 @@
-plugins {
-    id 'java'
-}
-
-group 'com.socialmedia'
-version 'unspecified'
-
-repositories {
-    mavenCentral()
+buildscript {
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$versions.springBoot")
+    }
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-}
-
-test {
-    useJUnitPlatform()
+    implementation libs.springBootMailSender
+    implementation libs.springBootRabbitMQ
 }

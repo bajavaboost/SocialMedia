@@ -65,3 +65,12 @@
     config --> rabbitmq.model --> rabbitmq.producer sıralaması ile katmanları doldurunuz.
 ### 10- ForgotPassword işleminin RabbitMq ile yapılması
     Auth forgot password metodunu rabbitmq ile userprofile service' e aktarınız.
+### 11- Kaydın maile gönderilmesi
+    Kayıt olan kişinin 'username, email, activationCode ve password' bilgileri mailine gönderilmelidir.
+    Bu işlem için rabbitmq kullanınız. Kayıt olan kişiye bilgilendirme maili gönderilmelidir.
+    - config(queue, binding belirlenecek) --> rabbitmq --> producer(queue belirlenecek , metot yazılacak) --> model(gönderilecek veriler belirlenecek)
+      --> service(producer metodunu çağırıp, içerisine model verilecek)
+      !! modele auth nesnesi mapplenmelidir(bknz. mapper)
+### 12- UserProfile Service' de passwordChange  
+    Kullanıcınn şifresini değiştirebildiği bir metot yazmalısınız. Burada değişen şifre OpenFeign aracılığıyla auth service' e gönderilmelidir.
+    Şifre AuthService' de de setlenmelidir.
