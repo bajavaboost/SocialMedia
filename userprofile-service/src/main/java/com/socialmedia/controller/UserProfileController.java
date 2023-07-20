@@ -2,6 +2,8 @@ package com.socialmedia.controller;
 
 import com.socialmedia.dto.request.*;
 import com.socialmedia.service.UserProfileService;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import static com.socialmedia.constant.ApiUrls.*;
 public class UserProfileController {
     private final UserProfileService userProfileService;
 
+    @Hidden
     @PostMapping(CREATE_USER)
     public ResponseEntity<Boolean> createUser(@RequestBody UserCreateRequestDto dto){
         return ResponseEntity.ok(userProfileService.createUser(dto));
@@ -29,19 +32,23 @@ public class UserProfileController {
     //           PutMapping --> veri tabanındaki varolan veriyi değiştirme(update) işlemlerinde,
     //           DeleteMapping --> silme işlemlerinde kullanılır.
     @PutMapping(UPDATE)
+    @Operation(summary = "kullanıcının giriş yaptıktan sonra eksik bilgilerini doldurduğu metot")
     public ResponseEntity<Boolean> updateUser(@RequestBody UserUpdateRequestDto dto){
         return ResponseEntity.ok(userProfileService.updateUser(dto));
     }
+    @Hidden
     @DeleteMapping("/delete-by-id/{authId}")
     public ResponseEntity<Boolean> deleteUser(@PathVariable Long authId){
         return ResponseEntity.ok(userProfileService.deleteById(authId));
     }
 
+    @Hidden
     @PutMapping(ACTIVATE_STATUS)
     public ResponseEntity<Boolean> activateStatus(@PathVariable Long authId){
         return ResponseEntity.ok(userProfileService.activateStatus(authId));
     }
 
+    @Hidden
     @PutMapping(FORGOT_PASSWORD)
     public ResponseEntity<Boolean> forgotPassword(@RequestBody UserSetPasswordRequestDto dto){
         return ResponseEntity.ok(userProfileService.forgotPassword(dto));

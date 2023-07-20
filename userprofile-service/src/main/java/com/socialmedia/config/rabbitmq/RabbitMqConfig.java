@@ -14,4 +14,11 @@ public class RabbitMqConfig {
     Queue authRegisterQueue(){
         return new Queue(authRegisterQueue);
     }
+
+    //Auth forgot password
+    private String forgotPassQueue = "forgot-pass-queue";
+    @Bean
+    Queue forgotPassQueue() {
+        return new Queue(forgotPassQueue);
+    }
 }

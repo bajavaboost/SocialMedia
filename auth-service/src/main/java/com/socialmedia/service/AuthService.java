@@ -7,6 +7,7 @@ import com.socialmedia.exception.ErrorType;
 import com.socialmedia.manager.IUserProfileManager;
 import com.socialmedia.mapper.IAuthMapper;
 import com.socialmedia.rabbitmq.producer.MailRegisterProducer;
+import com.socialmedia.rabbitmq.producer.UserForgotPassProducer;
 import com.socialmedia.rabbitmq.producer.UserRegisterProducer;
 import com.socialmedia.repository.IAuthRepository;
 import com.socialmedia.repository.entity.Auth;
@@ -25,13 +26,15 @@ public class AuthService extends ServiceManager<Auth, Long> {
     private final IUserProfileManager userProfileManager;
     private final UserRegisterProducer userRegisterProducer;
     private final MailRegisterProducer mailRegisterProducer;
+    private final UserForgotPassProducer userForgotPassProducer;
 
-    public AuthService(IAuthRepository authRepository, IUserProfileManager userProfileManager, UserRegisterProducer userRegisterProducer, MailRegisterProducer mailRegisterProducer) {
+    public AuthService(IAuthRepository authRepository, IUserProfileManager userProfileManager, UserRegisterProducer userRegisterProducer, MailRegisterProducer mailRegisterProducer, UserForgotPassProducer userForgotPassProducer) {
         super(authRepository);
         this.authRepository = authRepository;
         this.userProfileManager = userProfileManager;
         this.userRegisterProducer = userRegisterProducer;
         this.mailRegisterProducer = mailRegisterProducer;
+        this.userForgotPassProducer = userForgotPassProducer;
     }
 
     @Transactional //rolback --> Bir metodun veya metotları içeren bir sınıfın işlemlerini veritabanı üzerinde otomatik olarak
@@ -162,6 +165,20 @@ public class AuthService extends ServiceManager<Auth, Long> {
         auth.get().setPassword(dto.getPassword());
         update(auth.get());
         return true;
+    }
+
+    public String forgotPasswordWithRabbitMq(ForgotPasswordRequestDto dto){
+        Optional<Auth> auth = authRepository.findOptionalByEmail(dto.getEmail());
+        if (auth.isPresent() && auth.get().getStatus().equals(EStatus.ACTIVE)){
+            //random password
+            String randomPassword = UUID.randomUUID().toString();
+            auth.get().setPassword(randomPassword);
+            update(auth.get());
+            //userprofile rabbitmq
+            userForgotPassProducer.userForgotPassword(IAuthMapper.INSTANCE.fromAuthToForgotPassModel(auth.get()));
+            return "Yeni şifreniz: " + auth.get().getPassword();
+        }
+        throw new AuthManagerException(ErrorType.ACCOUNT_NOT_ACTIVE);
     }
 }
 
