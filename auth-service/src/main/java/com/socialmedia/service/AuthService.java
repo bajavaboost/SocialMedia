@@ -72,10 +72,8 @@ public class AuthService extends ServiceManager<Auth, Long> {
         return responseDto;
     }
 
-
-    //TODO by Arda --> Login işlemi şu an username üzerinden yapılmaktadır. Bu işlem email ile değiştirilecektir.
-    public Boolean login(LoginRequestDto dto) { //OTP service
-        Optional<Auth> optionalAuth = authRepository.findOptionalByUsernameAndPassword(dto.getUsername(), dto.getPassword());
+    public Boolean login(LoginRequestDto dto) {
+        Optional<Auth> optionalAuth = authRepository.findOptionalByEmailAndPassword(dto.getEmail(), dto.getPassword());
         if (optionalAuth.isEmpty()) {
             throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
         }
@@ -154,6 +152,16 @@ public class AuthService extends ServiceManager<Auth, Long> {
             return "Yeni şifreniz: " + auth.get().getPassword();
         }
         throw new AuthManagerException(ErrorType.ACCOUNT_NOT_ACTIVE);
+    }
+
+    public Boolean passwordChange(ToAuthPasswordChangeRequestDto dto){
+        Optional<Auth> auth = authRepository.findById(dto.getAuthId());
+        if (auth.isEmpty()){
+            throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
+        }
+        auth.get().setPassword(dto.getPassword());
+        update(auth.get());
+        return true;
     }
 }
 

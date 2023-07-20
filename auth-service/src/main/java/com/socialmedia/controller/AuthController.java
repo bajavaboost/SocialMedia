@@ -70,4 +70,9 @@ public class AuthController {
     public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequestDto dto){
         return ResponseEntity.ok(authService.forgotPassword(dto));
     }
+
+    @PutMapping("/password-change")
+    public ResponseEntity<Boolean> passwordChange(@RequestBody ToAuthPasswordChangeRequestDto dto){
+        return ResponseEntity.ok(authService.passwordChange(dto));
+    }
 }

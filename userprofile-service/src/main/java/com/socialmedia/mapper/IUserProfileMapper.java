@@ -1,6 +1,7 @@
 package com.socialmedia.mapper;
 
 import com.socialmedia.dto.request.AuthUpdateRequestDto;
+import com.socialmedia.dto.request.ToAuthPasswordChangeRequestDto;
 import com.socialmedia.dto.request.UserCreateRequestDto;
 import com.socialmedia.dto.request.UserUpdateRequestDto;
 import com.socialmedia.rabbitmq.model.UserRegisterModel;
@@ -21,4 +22,6 @@ public interface IUserProfileMapper {
     UserProfile fromUpdateDtoToUserProfile(UserUpdateRequestDto dto, @MappingTarget UserProfile userProfile);
 
     AuthUpdateRequestDto fromUserProfileToAuthUpdateDto(UserProfile userProfile);
+
+    ToAuthPasswordChangeRequestDto fromUserProfileToAuthPasswordChangeDto(final UserProfile userProfile);
 }

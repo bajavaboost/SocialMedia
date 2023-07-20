@@ -10,4 +10,7 @@ public class ApiUrls {
     public static final String UPDATE = "/update";
     public static final String FIND_BY_ID = "/find-by-id";
     public static final String FIND_ALL = "/find-all";
+    public static final String FORGOT_PASSWORD = "/forgot-password";
+    public static final String PASSWORD_CHANGE = "/password-change";
+    public static final String ACTIVATE_STATUS = "/activate-status/{authId}";
 }

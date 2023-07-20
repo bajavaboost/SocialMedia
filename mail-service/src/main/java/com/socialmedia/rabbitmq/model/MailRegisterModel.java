@@ -1,15 +1,19 @@
-package com.socialmedia.dto.request;
+package com.socialmedia.rabbitmq.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder
-public class LoginRequestDto {
+public class MailRegisterModel implements Serializable {
+    private String username;
     private String email;
+    private String activationCode;
     private String password;
 }

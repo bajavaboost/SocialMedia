@@ -1,9 +1,6 @@
 package com.socialmedia.service;
 
-import com.socialmedia.dto.request.AuthUpdateRequestDto;
-import com.socialmedia.dto.request.UserCreateRequestDto;
-import com.socialmedia.dto.request.UserSetPasswordRequestDto;
-import com.socialmedia.dto.request.UserUpdateRequestDto;
+import com.socialmedia.dto.request.*;
 import com.socialmedia.exception.ErrorType;
 import com.socialmedia.exception.UserProfileManagerException;
 import com.socialmedia.manager.IAuthManager;
@@ -77,5 +74,22 @@ public class UserProfileService extends ServiceManager<UserProfile, String> {
         userProfile.get().setPassword(dto.getPassword());
         update(userProfile.get());
         return true;
+    }
+
+    public Boolean passwordChange(PasswordChangeRequestDto dto){
+        Optional<UserProfile> userProfile = userProfileRepository.findById(dto.getId());
+        if (userProfile.isPresent()){
+            if (userProfile.get().getPassword().equals(dto.getOldPassword())){
+                userProfile.get().setPassword(dto.getNewPassword());
+                save(userProfile.get());
+                //authmanager
+                authManager.passwordChange(IUserProfileMapper.INSTANCE.fromUserProfileToAuthPasswordChangeDto(userProfile.get()));
+                return true;
+            }else {
+                throw new UserProfileManagerException(ErrorType.PASSWORD_ERROR);
+            }
+        }else {
+            throw new UserProfileManagerException(ErrorType.USER_NOT_FOUND);
+        }
     }
 }

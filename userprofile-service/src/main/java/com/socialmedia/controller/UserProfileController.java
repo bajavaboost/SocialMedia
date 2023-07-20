@@ -1,8 +1,6 @@
 package com.socialmedia.controller;
 
-import com.socialmedia.dto.request.UserCreateRequestDto;
-import com.socialmedia.dto.request.UserSetPasswordRequestDto;
-import com.socialmedia.dto.request.UserUpdateRequestDto;
+import com.socialmedia.dto.request.*;
 import com.socialmedia.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,13 +37,18 @@ public class UserProfileController {
         return ResponseEntity.ok(userProfileService.deleteById(authId));
     }
 
-    @PutMapping("/activate-status/{authId}")
+    @PutMapping(ACTIVATE_STATUS)
     public ResponseEntity<Boolean> activateStatus(@PathVariable Long authId){
         return ResponseEntity.ok(userProfileService.activateStatus(authId));
     }
 
-    @PutMapping("/forgot-password")
+    @PutMapping(FORGOT_PASSWORD)
     public ResponseEntity<Boolean> forgotPassword(@RequestBody UserSetPasswordRequestDto dto){
         return ResponseEntity.ok(userProfileService.forgotPassword(dto));
+    }
+
+    @PutMapping(PASSWORD_CHANGE)
+    public ResponseEntity<Boolean> passwordChange(PasswordChangeRequestDto dto){
+        return ResponseEntity.ok(userProfileService.passwordChange(dto));
     }
 }
