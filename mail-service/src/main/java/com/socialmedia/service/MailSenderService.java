@@ -1,5 +1,6 @@
 package com.socialmedia.service;
 
+import com.socialmedia.rabbitmq.model.MailForgotPassModel;
 import com.socialmedia.rabbitmq.model.MailRegisterModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -25,5 +26,17 @@ public class MailSenderService {
                 + "\nDoğrulama Kodu: " + mailRegisterModel.getActivationCode()
         );
         javaMailSender.send(mailMessage);
+    }
+
+    public void sendForgotPassword(MailForgotPassModel mailForgotPassModel){
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom("${spring.mail.username}"); //sunucu olarak kullanılacak mail
+        mailMessage.setTo(mailForgotPassModel.getEmail()); //kullanıcının girmiş olduğu mail
+        mailMessage.setSubject("ŞİFRE SIFIRLAMA MAİLİ");
+        mailMessage.setText("Tebrikler, şifreniz başarıyla sıfırlanmıştır. \n"
+                            + "Kullanıcı adı: " + mailForgotPassModel.getUsername()
+                            + "\nŞifre: " + mailForgotPassModel.getRandomPassword()
+                            + "\nLütfen giriş yaptığınızda şifrenizi değiştiriniz."
+        );
     }
 }

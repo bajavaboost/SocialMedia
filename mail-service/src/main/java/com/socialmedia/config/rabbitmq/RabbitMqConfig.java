@@ -12,4 +12,11 @@ public class RabbitMqConfig {
     Queue mailRegisterQueue(){
         return new Queue(mailRegisterQueue);
     }
+
+    //Auth forgotPass consumer
+    private String forgotPassMailQueue = "forgot-pass-mail-queue";
+    @Bean
+    Queue forgotPassMailQueue(){
+        return new Queue(forgotPassMailQueue);
+    }
 }

@@ -64,4 +64,18 @@ public class RabbitMqConfig {
     public Binding forgotPassBinding(final Queue forgotPassQueue, final DirectExchange authExchange){
         return BindingBuilder.bind(forgotPassQueue).to(authExchange).with(forgotPassBinding);
     }
+
+    //Mail forgot password
+    private String forgotPassMailQueue = "forgot-pass-mail-queue";
+    @Bean
+    Queue forgotPassMailQueue(){
+        return new Queue(forgotPassMailQueue);
+    }
+
+    private String forgotPassMailBinding = "forgot-pass-mail-binding";
+
+    @Bean
+    public Binding forgotPassMailBinding(final Queue forgotPassMailQueue, final DirectExchange authExchange){
+        return BindingBuilder.bind(forgotPassMailQueue).to(authExchange).with(forgotPassMailBinding);
+    }
 }

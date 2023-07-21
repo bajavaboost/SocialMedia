@@ -4,6 +4,7 @@ import com.socialmedia.dto.request.AuthUpdateRequestDto;
 import com.socialmedia.dto.request.RegisterRequestDto;
 import com.socialmedia.dto.request.UserCreateRequestDto;
 import com.socialmedia.dto.response.RegisterResponseDto;
+import com.socialmedia.rabbitmq.model.MailForgotPassModel;
 import com.socialmedia.rabbitmq.model.MailRegisterModel;
 import com.socialmedia.rabbitmq.model.UserForgotPassModel;
 import com.socialmedia.rabbitmq.model.UserRegisterModel;
@@ -34,4 +35,6 @@ public interface IAuthMapper {
     Auth fromAuthUpdateDtoToAuth(AuthUpdateRequestDto dto, @MappingTarget Auth auth);
     @Mapping(source = "id", target = "authId")
     UserForgotPassModel fromAuthToForgotPassModel(final Auth auth);
+
+    MailForgotPassModel fromAuthToMailForgotPassModel(final Auth auth);
 }

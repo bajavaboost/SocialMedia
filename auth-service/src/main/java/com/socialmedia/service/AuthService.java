@@ -6,6 +6,8 @@ import com.socialmedia.exception.AuthManagerException;
 import com.socialmedia.exception.ErrorType;
 import com.socialmedia.manager.IUserProfileManager;
 import com.socialmedia.mapper.IAuthMapper;
+import com.socialmedia.rabbitmq.model.MailForgotPassModel;
+import com.socialmedia.rabbitmq.producer.MailForgotPassProducer;
 import com.socialmedia.rabbitmq.producer.MailRegisterProducer;
 import com.socialmedia.rabbitmq.producer.UserForgotPassProducer;
 import com.socialmedia.rabbitmq.producer.UserRegisterProducer;
@@ -14,9 +16,6 @@ import com.socialmedia.repository.entity.Auth;
 import com.socialmedia.repository.enums.EStatus;
 import com.socialmedia.utility.CodeGenerator;
 import com.socialmedia.utility.ServiceManager;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,10 +31,11 @@ public class AuthService extends ServiceManager<Auth, Long> {
     private final MailRegisterProducer mailRegisterProducer;
     private final UserForgotPassProducer userForgotPassProducer;
     private final PasswordEncoder passwordEncoder;
+    private final MailForgotPassProducer mailForgotPassProducer;
 
     public AuthService(IAuthRepository authRepository, IUserProfileManager userProfileManager,
                        UserRegisterProducer userRegisterProducer, MailRegisterProducer mailRegisterProducer,
-                       UserForgotPassProducer userForgotPassProducer, PasswordEncoder passwordEncoder) {
+                       UserForgotPassProducer userForgotPassProducer, PasswordEncoder passwordEncoder, MailForgotPassProducer mailForgotPassProducer) {
         super(authRepository);
         this.authRepository = authRepository;
         this.userProfileManager = userProfileManager;
@@ -43,6 +43,7 @@ public class AuthService extends ServiceManager<Auth, Long> {
         this.mailRegisterProducer = mailRegisterProducer;
         this.userForgotPassProducer = userForgotPassProducer;
         this.passwordEncoder = passwordEncoder;
+        this.mailForgotPassProducer = mailForgotPassProducer;
     }
 
     @Transactional //rolback --> Bir metodun veya metotları içeren bir sınıfın işlemlerini veritabanı üzerinde otomatik olarak
@@ -69,6 +70,7 @@ public class AuthService extends ServiceManager<Auth, Long> {
         return responseDto;
     }
 
+    //TODO maile gönderilen verilerde password şifrelenmiş olarak gönderiliyor.
     public RegisterResponseDto registerWithRabbitMQ(RegisterRequestDto dto) {
         Auth auth = IAuthMapper.INSTANCE.fromAuthRegisterRequestDtoToAuth(dto);
         if (auth.getPassword().equals(dto.getRePassword())){
@@ -176,6 +178,18 @@ public class AuthService extends ServiceManager<Auth, Long> {
             update(auth.get());
             //userprofile rabbitmq
             userForgotPassProducer.userForgotPassword(IAuthMapper.INSTANCE.fromAuthToForgotPassModel(auth.get()));
+
+            //1. yöntem --> builder
+            mailForgotPassProducer.forgotPassSendMail(MailForgotPassModel.builder()
+                            .username(auth.get().getUsername())
+                            .email(auth.get().getEmail())
+                            .randomPassword(randomPassword)
+                    .build());
+            //2. yöntem --> mapper
+            /*MailForgotPassModel model = IAuthMapper.INSTANCE.fromAuthToMailForgotPassModel(auth.get());
+            model.setRandomPassword(randomPassword);
+            mailForgotPassProducer.forgotPassSendMail(model);*/
+
             return "Yeni şifreniz: " + randomPassword;
         }
         throw new AuthManagerException(ErrorType.ACCOUNT_NOT_ACTIVE);
