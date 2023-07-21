@@ -23,7 +23,7 @@ public class UserProfileController {
     }
 
     //@RequestParam -->
-    //@PathVariable -->,
+    //@PathVariable -->
 
     //Delete, Post, Put Mapping farkları ?
     //Neden Delete, Post, Put mapping vardır diye sorduğumuzda tek fark controller metotlarını

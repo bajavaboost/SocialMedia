@@ -14,6 +14,10 @@ import com.socialmedia.repository.entity.Auth;
 import com.socialmedia.repository.enums.EStatus;
 import com.socialmedia.utility.CodeGenerator;
 import com.socialmedia.utility.ServiceManager;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,14 +31,18 @@ public class AuthService extends ServiceManager<Auth, Long> {
     private final UserRegisterProducer userRegisterProducer;
     private final MailRegisterProducer mailRegisterProducer;
     private final UserForgotPassProducer userForgotPassProducer;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthService(IAuthRepository authRepository, IUserProfileManager userProfileManager, UserRegisterProducer userRegisterProducer, MailRegisterProducer mailRegisterProducer, UserForgotPassProducer userForgotPassProducer) {
+    public AuthService(IAuthRepository authRepository, IUserProfileManager userProfileManager,
+                       UserRegisterProducer userRegisterProducer, MailRegisterProducer mailRegisterProducer,
+                       UserForgotPassProducer userForgotPassProducer, PasswordEncoder passwordEncoder) {
         super(authRepository);
         this.authRepository = authRepository;
         this.userProfileManager = userProfileManager;
         this.userRegisterProducer = userRegisterProducer;
         this.mailRegisterProducer = mailRegisterProducer;
         this.userForgotPassProducer = userForgotPassProducer;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional //rolback --> Bir metodun veya metotları içeren bir sınıfın işlemlerini veritabanı üzerinde otomatik olarak
@@ -42,7 +50,8 @@ public class AuthService extends ServiceManager<Auth, Long> {
     public RegisterResponseDto register(RegisterRequestDto dto) {
         Auth auth = IAuthMapper.INSTANCE.fromAuthRegisterRequestDtoToAuth(dto);
         if (auth.getPassword().equals(dto.getRePassword())){
-            auth.setActivationCode(CodeGenerator.generatecode());
+            auth.setActivationCode(CodeGenerator.generateCode());
+            auth.setPassword(passwordEncoder.encode(dto.getPassword()));
             save(auth);
             //save(auth);
             //39. satırdan sonra auth' un id bilgisi vardır.
@@ -63,7 +72,8 @@ public class AuthService extends ServiceManager<Auth, Long> {
     public RegisterResponseDto registerWithRabbitMQ(RegisterRequestDto dto) {
         Auth auth = IAuthMapper.INSTANCE.fromAuthRegisterRequestDtoToAuth(dto);
         if (auth.getPassword().equals(dto.getRePassword())){
-            auth.setActivationCode(CodeGenerator.generatecode());
+            auth.setActivationCode(CodeGenerator.generateCode());
+            auth.setPassword(passwordEncoder.encode(dto.getPassword()));
             save(auth);
             userRegisterProducer.sendNewUser(IAuthMapper.INSTANCE.fromAuthToUserRegisterModel(auth));
             //rabbit mail sender
@@ -76,8 +86,8 @@ public class AuthService extends ServiceManager<Auth, Long> {
     }
 
     public Boolean login(LoginRequestDto dto) {
-        Optional<Auth> optionalAuth = authRepository.findOptionalByEmailAndPassword(dto.getEmail(), dto.getPassword());
-        if (optionalAuth.isEmpty()) {
+        Optional<Auth> optionalAuth = authRepository.findOptionalByEmail(dto.getEmail());
+        if (optionalAuth.isEmpty() || !passwordEncoder.matches(dto.getPassword(), optionalAuth.get().getPassword())) {
             throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
         }
         if(!optionalAuth.get().getStatus().equals(EStatus.ACTIVE)){
@@ -144,7 +154,7 @@ public class AuthService extends ServiceManager<Auth, Long> {
         if (auth.isPresent() && auth.get().getStatus().equals(EStatus.ACTIVE)){
             //random password
             String randomPassword = UUID.randomUUID().toString();
-            auth.get().setPassword(randomPassword);
+            auth.get().setPassword(passwordEncoder.encode(randomPassword));
             save(auth.get());
             //userprofilemanager
             UserSetPasswordRequestDto userProfileDto = UserSetPasswordRequestDto.builder()
@@ -152,7 +162,21 @@ public class AuthService extends ServiceManager<Auth, Long> {
                     .password(auth.get().getPassword())
                     .build();
             userProfileManager.forgotPassword(userProfileDto);
-            return "Yeni şifreniz: " + auth.get().getPassword();
+            return "Yeni şifreniz: " + randomPassword;
+        }
+        throw new AuthManagerException(ErrorType.ACCOUNT_NOT_ACTIVE);
+    }
+
+    public String forgotPasswordWithRabbitMq(ForgotPasswordRequestDto dto){
+        Optional<Auth> auth = authRepository.findOptionalByEmail(dto.getEmail());
+        if (auth.isPresent() && auth.get().getStatus().equals(EStatus.ACTIVE)){
+            //random password
+            String randomPassword = UUID.randomUUID().toString();
+            auth.get().setPassword(passwordEncoder.encode(randomPassword));
+            update(auth.get());
+            //userprofile rabbitmq
+            userForgotPassProducer.userForgotPassword(IAuthMapper.INSTANCE.fromAuthToForgotPassModel(auth.get()));
+            return "Yeni şifreniz: " + randomPassword;
         }
         throw new AuthManagerException(ErrorType.ACCOUNT_NOT_ACTIVE);
     }
@@ -165,20 +189,6 @@ public class AuthService extends ServiceManager<Auth, Long> {
         auth.get().setPassword(dto.getPassword());
         update(auth.get());
         return true;
-    }
-
-    public String forgotPasswordWithRabbitMq(ForgotPasswordRequestDto dto){
-        Optional<Auth> auth = authRepository.findOptionalByEmail(dto.getEmail());
-        if (auth.isPresent() && auth.get().getStatus().equals(EStatus.ACTIVE)){
-            //random password
-            String randomPassword = UUID.randomUUID().toString();
-            auth.get().setPassword(randomPassword);
-            update(auth.get());
-            //userprofile rabbitmq
-            userForgotPassProducer.userForgotPassword(IAuthMapper.INSTANCE.fromAuthToForgotPassModel(auth.get()));
-            return "Yeni şifreniz: " + auth.get().getPassword();
-        }
-        throw new AuthManagerException(ErrorType.ACCOUNT_NOT_ACTIVE);
     }
 }
 

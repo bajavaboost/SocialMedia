@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class CodeGenerator {
 
-    public static String generatecode() {
+    public static String generateCode() {
         String code = UUID.randomUUID().toString();
         String[] data = code.split("-");
         String newCode = "";

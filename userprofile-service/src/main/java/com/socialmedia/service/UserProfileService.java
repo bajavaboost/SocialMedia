@@ -11,6 +11,7 @@ import com.socialmedia.repository.IUserProfileRepository;
 import com.socialmedia.repository.entity.UserProfile;
 import com.socialmedia.repository.enums.EStatus;
 import com.socialmedia.utility.ServiceManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,10 +21,12 @@ import java.util.Optional;
 public class UserProfileService extends ServiceManager<UserProfile, String> {
     private final IUserProfileRepository userProfileRepository;
     private final IAuthManager authManager;
-    public UserProfileService(IUserProfileRepository userProfileRepository, IAuthManager authManager) {
+    private final PasswordEncoder passwordEncoder;
+    public UserProfileService(IUserProfileRepository userProfileRepository, IAuthManager authManager, PasswordEncoder passwordEncoder) {
         super(userProfileRepository);
         this.userProfileRepository = userProfileRepository;
         this.authManager = authManager;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Boolean createUser(UserCreateRequestDto dto){ //dto --> authId, name, surname, email, username
@@ -80,8 +83,8 @@ public class UserProfileService extends ServiceManager<UserProfile, String> {
     public Boolean passwordChange(PasswordChangeRequestDto dto){
         Optional<UserProfile> userProfile = userProfileRepository.findById(dto.getId());
         if (userProfile.isPresent()){
-            if (userProfile.get().getPassword().equals(dto.getOldPassword())){
-                userProfile.get().setPassword(dto.getNewPassword());
+            if (passwordEncoder.matches(dto.getOldPassword(), userProfile.get().getPassword())){
+                userProfile.get().setPassword(passwordEncoder.encode(dto.getNewPassword()));
                 save(userProfile.get());
                 //authmanager
                 authManager.passwordChange(IUserProfileMapper.INSTANCE.fromUserProfileToAuthPasswordChangeDto(userProfile.get()));
