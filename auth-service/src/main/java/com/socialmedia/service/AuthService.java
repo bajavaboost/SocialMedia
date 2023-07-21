@@ -180,15 +180,15 @@ public class AuthService extends ServiceManager<Auth, Long> {
             userForgotPassProducer.userForgotPassword(IAuthMapper.INSTANCE.fromAuthToForgotPassModel(auth.get()));
 
             //1. yöntem --> builder
-            mailForgotPassProducer.forgotPassSendMail(MailForgotPassModel.builder()
+            /*mailForgotPassProducer.forgotPassSendMail(MailForgotPassModel.builder()
                             .username(auth.get().getUsername())
                             .email(auth.get().getEmail())
                             .randomPassword(randomPassword)
-                    .build());
+                    .build());*/
             //2. yöntem --> mapper
-            /*MailForgotPassModel model = IAuthMapper.INSTANCE.fromAuthToMailForgotPassModel(auth.get());
+            MailForgotPassModel model = IAuthMapper.INSTANCE.fromAuthToMailForgotPassModel(auth.get());
             model.setRandomPassword(randomPassword);
-            mailForgotPassProducer.forgotPassSendMail(model);*/
+            mailForgotPassProducer.forgotPassSendMail(model);
 
             return "Yeni şifreniz: " + randomPassword;
         }

@@ -29,6 +29,7 @@ public class MailSenderService {
     }
 
     public void sendForgotPassword(MailForgotPassModel mailForgotPassModel){
+        System.out.println(mailForgotPassModel);
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("${spring.mail.username}"); //sunucu olarak kullanılacak mail
         mailMessage.setTo(mailForgotPassModel.getEmail()); //kullanıcının girmiş olduğu mail
@@ -38,5 +39,6 @@ public class MailSenderService {
                             + "\nŞifre: " + mailForgotPassModel.getRandomPassword()
                             + "\nLütfen giriş yaptığınızda şifrenizi değiştiriniz."
         );
+        javaMailSender.send(mailMessage);
     }
 }
