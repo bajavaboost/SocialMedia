@@ -4,4 +4,5 @@ include 'userprofile-service'
 include 'mail-service'
 include 'post-service'
 include 'config-server'
+include 'config-server-git'
 
