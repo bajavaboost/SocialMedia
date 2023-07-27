@@ -7,6 +7,7 @@ import com.socialmedia.exception.ErrorType;
 import com.socialmedia.manager.IUserProfileManager;
 import com.socialmedia.mapper.IAuthMapper;
 import com.socialmedia.rabbitmq.model.MailForgotPassModel;
+import com.socialmedia.rabbitmq.model.MailRegisterModel;
 import com.socialmedia.rabbitmq.producer.MailForgotPassProducer;
 import com.socialmedia.rabbitmq.producer.MailRegisterProducer;
 import com.socialmedia.rabbitmq.producer.UserForgotPassProducer;
@@ -80,7 +81,9 @@ public class AuthService extends ServiceManager<Auth, Long> {
             save(auth);
             userRegisterProducer.sendNewUser(IAuthMapper.INSTANCE.fromAuthToUserRegisterModel(auth));
             //rabbit mail sender
-            mailRegisterProducer.sendRegisterMail(IAuthMapper.INSTANCE.fromAuthToMailRegisterModel(auth));
+            MailRegisterModel model = IAuthMapper.INSTANCE.fromAuthToMailRegisterModel(auth);
+            model.setDecodedPassword(dto.getPassword());
+            mailRegisterProducer.sendRegisterMail(model);
         }else {
             throw new AuthManagerException(ErrorType.PASSWORD_ERROR);
         }

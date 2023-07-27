@@ -22,7 +22,7 @@ public class MailSenderService {
         mailMessage.setText(
                 "Tebrikler, başarıyla kayıt oldunuz. Giriş ve onay bilgileriniz aşağıdaki gibidir.\n"
                 + "Kullanıcı adı: " + mailRegisterModel.getUsername()
-                + "\nŞifre: " + mailRegisterModel.getPassword()
+                + "\nŞifre: " + mailRegisterModel.getDecodedPassword()
                 + "\nDoğrulama Kodu: " + mailRegisterModel.getActivationCode()
         );
         javaMailSender.send(mailMessage);
