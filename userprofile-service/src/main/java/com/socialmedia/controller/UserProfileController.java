@@ -1,12 +1,15 @@
 package com.socialmedia.controller;
 
 import com.socialmedia.dto.request.*;
+import com.socialmedia.repository.entity.UserProfile;
 import com.socialmedia.service.UserProfileService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.socialmedia.constant.ApiUrls.*;
 
@@ -15,6 +18,11 @@ import static com.socialmedia.constant.ApiUrls.*;
 @RequestMapping(USER_PROFILE)
 public class UserProfileController {
     private final UserProfileService userProfileService;
+
+    @GetMapping("/find-all")
+    public ResponseEntity<List<UserProfile>> findAll(){
+        return ResponseEntity.ok(userProfileService.findAll());
+    }
 
     @Hidden
     @PostMapping(CREATE_USER)

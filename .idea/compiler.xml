@@ -11,6 +11,7 @@
         <module name="SocialMedia-Java8.config-server-git.main" />
         <module name="SocialMedia-Java8.auth-service.main" />
         <module name="SocialMedia-Java8.main" />
+        <module name="SocialMedia-Java8.api-gateway-service.main" />
         <module name="SocialMedia-Java8.config-server.main" />
         <module name="SocialMedia-Java8.userprofile-service.main" />
         <module name="SocialMedia-Java8.mail-service.main" />
