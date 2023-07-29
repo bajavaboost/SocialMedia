@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PasswordChangeRequestDto {
-    private String id;
+    private String token;
     private String oldPassword;
     private String newPassword;
 }

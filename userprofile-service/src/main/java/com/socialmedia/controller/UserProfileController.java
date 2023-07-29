@@ -41,8 +41,8 @@ public class UserProfileController {
     //           DeleteMapping --> silme işlemlerinde kullanılır.
     @PutMapping(UPDATE)
     @Operation(summary = "kullanıcının giriş yaptıktan sonra eksik bilgilerini doldurduğu metot")
-    public ResponseEntity<Boolean> updateUser(@RequestBody UserUpdateRequestDto dto){
-        return ResponseEntity.ok(userProfileService.updateUser(dto));
+    public ResponseEntity<Boolean> updateUser(String token, @RequestBody UserUpdateRequestDto dto){
+        return ResponseEntity.ok(userProfileService.updateUser(token, dto));
     }
     @Hidden
     @DeleteMapping("/delete-by-id/{authId}")

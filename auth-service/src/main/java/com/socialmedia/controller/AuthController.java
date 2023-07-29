@@ -29,7 +29,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.registerWithRabbitMQ(dto));
     }
     @PostMapping(LOGIN)
-    public ResponseEntity<Boolean> login(@RequestBody LoginRequestDto dto){
+    public ResponseEntity<String> login(@RequestBody LoginRequestDto dto){
         return ResponseEntity.ok(authService.login(dto));
     }
 
@@ -64,8 +64,8 @@ public class AuthController {
     }
 
     @DeleteMapping(DELETE)
-    public ResponseEntity<Boolean> delete(Long id){
-        return ResponseEntity.ok(authService.delete(id));
+    public ResponseEntity<Boolean> delete(String token){
+        return ResponseEntity.ok(authService.delete(token));
     }
 
     @PostMapping(FORGOT_PASSWORD)

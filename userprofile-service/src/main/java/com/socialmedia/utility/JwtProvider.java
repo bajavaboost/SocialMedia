@@ -4,9 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.socialmedia.exception.AuthManagerException;
 import com.socialmedia.exception.ErrorType;
-import com.socialmedia.repository.enums.ERole;
+import com.socialmedia.exception.UserProfileManagerException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -19,7 +18,7 @@ public class JwtProvider {
     String secretKey = "secretKey";
 
     //id ve role bilgisi ile token üretmek için kullanılır
-    public Optional<String> createToken(Long id, ERole eRole){
+    public Optional<String> createToken(Long id){
         String token = null;
         Date date = new Date(System.currentTimeMillis() + (1000*60*5)); //tokenın geçerlilik süresi = 5dk
         try {
@@ -29,7 +28,6 @@ public class JwtProvider {
                     .withIssuedAt(new Date()) //tokenın oluşturulduğu zamanı belirtir
                     .withExpiresAt(date) //token geçerlilik süresi
                     .withClaim("id", id)
-                    .withClaim("role", eRole.toString())
                     .sign(Algorithm.HMAC512(secretKey));
             return Optional.of(token);
         }catch (Exception e){
@@ -45,12 +43,29 @@ public class JwtProvider {
             //Token doğrulanırsa decode edilecektir
             DecodedJWT decodedJWT = verifier.verify(token);
             if (decodedJWT == null){
-                throw new AuthManagerException(ErrorType.INVALID_TOKEN);
+                throw new UserProfileManagerException(ErrorType.INVALID_TOKEN);
             }
             Long id = decodedJWT.getClaim("id").asLong();
             return Optional.of(id); // == Optional<Long>
         }catch (Exception e){
-            throw new AuthManagerException(ErrorType.INVALID_TOKEN);
+            throw new UserProfileManagerException(ErrorType.INVALID_TOKEN);
+        }
+    }
+
+    public Optional<String> getRoleFromToken(String token){
+        try{
+            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+            //Metoda verilen token bizim belirlemiş olduğumuz standartlara göre kontrol edilir
+            JWTVerifier verifier = JWT.require(algorithm).withAudience(audience).withIssuer(issuer).build();
+            //Token doğrulanırsa decode edilecektir
+            DecodedJWT decodedJWT = verifier.verify(token);
+            if (decodedJWT == null){
+                throw new UserProfileManagerException(ErrorType.INVALID_TOKEN);
+            }
+            String role = decodedJWT.getClaim("role").asString();
+            return Optional.of(role); // == Optional<Long>
+        }catch (Exception e){
+            throw new UserProfileManagerException(ErrorType.INVALID_TOKEN);
         }
     }
 }

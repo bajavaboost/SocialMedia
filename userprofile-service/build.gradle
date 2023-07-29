@@ -8,4 +8,5 @@ dependencies {
     implementation libs.mongoDB
     implementation libs.springCloudConfigClient
     implementation libs.springBootRabbitMQ
+    implementation libs.javaJWT
 }

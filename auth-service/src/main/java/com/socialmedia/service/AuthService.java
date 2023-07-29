@@ -16,8 +16,8 @@ import com.socialmedia.repository.IAuthRepository;
 import com.socialmedia.repository.entity.Auth;
 import com.socialmedia.repository.enums.EStatus;
 import com.socialmedia.utility.CodeGenerator;
+import com.socialmedia.utility.JwtProvider;
 import com.socialmedia.utility.ServiceManager;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,10 +34,11 @@ public class AuthService extends ServiceManager<Auth, Long> {
     private final UserForgotPassProducer userForgotPassProducer;
     private final PasswordEncoder passwordEncoder;
     private final MailForgotPassProducer mailForgotPassProducer;
+    private final JwtProvider jwtProvider;
 
     public AuthService(IAuthRepository authRepository, IUserProfileManager userProfileManager,
                        UserRegisterProducer userRegisterProducer, MailRegisterProducer mailRegisterProducer,
-                       UserForgotPassProducer userForgotPassProducer, PasswordEncoder passwordEncoder, MailForgotPassProducer mailForgotPassProducer) {
+                       UserForgotPassProducer userForgotPassProducer, PasswordEncoder passwordEncoder, MailForgotPassProducer mailForgotPassProducer, JwtProvider jwtProvider) {
         super(authRepository);
         this.authRepository = authRepository;
         this.userProfileManager = userProfileManager;
@@ -46,6 +47,7 @@ public class AuthService extends ServiceManager<Auth, Long> {
         this.userForgotPassProducer = userForgotPassProducer;
         this.passwordEncoder = passwordEncoder;
         this.mailForgotPassProducer = mailForgotPassProducer;
+        this.jwtProvider = jwtProvider;
     }
 
     @Transactional //rolback --> Bir metodun veya metotları içeren bir sınıfın işlemlerini veritabanı üzerinde otomatik olarak
@@ -91,15 +93,17 @@ public class AuthService extends ServiceManager<Auth, Long> {
         return responseDto;
     }
 
-    public Boolean login(LoginRequestDto dto) {
-        Optional<Auth> optionalAuth = authRepository.findOptionalByEmail(dto.getEmail());
-        if (optionalAuth.isEmpty() || !passwordEncoder.matches(dto.getPassword(), optionalAuth.get().getPassword())) {
+    public String login(LoginRequestDto dto) {
+        Optional<Auth> auth = authRepository.findOptionalByEmail(dto.getEmail());
+        if (auth.isEmpty() || !passwordEncoder.matches(dto.getPassword(), auth.get().getPassword())) {
             throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
         }
-        if(!optionalAuth.get().getStatus().equals(EStatus.ACTIVE)){
+        if(!auth.get().getStatus().equals(EStatus.ACTIVE)){
             throw new AuthManagerException(ErrorType.ACCOUNT_NOT_ACTIVE);
         }
-        return true;
+        return jwtProvider.createToken(auth.get().getId(), auth.get().getRole())
+                .orElseThrow(() -> {throw new AuthManagerException(ErrorType.TOKEN_NOT_CREATED);
+                });
     }
 
     @Transactional
@@ -136,8 +140,12 @@ public class AuthService extends ServiceManager<Auth, Long> {
     }
 
     @Transactional
-    public Boolean delete(Long id){
-        Optional<Auth> auth = authRepository.findById(id);
+    public Boolean delete(String token){
+        Optional<Long> authId = jwtProvider.getIdFromToken(token);
+        if (authId.isEmpty()){
+            throw new AuthManagerException(ErrorType.INVALID_TOKEN);
+        }
+        Optional<Auth> auth = authRepository.findById(authId.get());
         //optional nesnesinin aşağıdaki iki kontrolü de kullanılır ve aynıdır
         auth.orElseThrow(() -> {throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
         });
@@ -148,7 +156,7 @@ public class AuthService extends ServiceManager<Auth, Long> {
             auth.get().setStatus(EStatus.DELETED);
             update(auth.get());
             //userprofilemanager
-            userProfileManager.deleteUser(auth.get().getId());
+            userProfileManager.deleteUser(authId.get());
             return true;
         }else {
             throw new AuthManagerException(ErrorType.USER_NOT_FOUND);

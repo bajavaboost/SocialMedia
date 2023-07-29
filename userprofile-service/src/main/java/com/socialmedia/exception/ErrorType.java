@@ -17,6 +17,7 @@ public enum ErrorType {
     ACTIVATE_CODE_ERROR(4005,"Aktivasyon kodu hatası",HttpStatus.BAD_REQUEST),
     ALREADY_ACTIVE(4006,"Hesabınız Zaten Aktif",HttpStatus.BAD_REQUEST),
     PASSWORD_ERROR(4007, "Şifreler uyuşmuyor.", HttpStatus.BAD_REQUEST),
+    INVALID_TOKEN(4008, "Token hatası", HttpStatus.BAD_REQUEST),
 
     //SERVER ERROR
     INTERNAL_ERROR(5000,"Sunucu Hatası",HttpStatus.INTERNAL_SERVER_ERROR);

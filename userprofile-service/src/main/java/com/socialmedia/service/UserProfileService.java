@@ -10,6 +10,7 @@ import com.socialmedia.rabbitmq.model.UserRegisterModel;
 import com.socialmedia.repository.IUserProfileRepository;
 import com.socialmedia.repository.entity.UserProfile;
 import com.socialmedia.repository.enums.EStatus;
+import com.socialmedia.utility.JwtProvider;
 import com.socialmedia.utility.ServiceManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,13 @@ public class UserProfileService extends ServiceManager<UserProfile, String> {
     private final IUserProfileRepository userProfileRepository;
     private final IAuthManager authManager;
     private final PasswordEncoder passwordEncoder;
-    public UserProfileService(IUserProfileRepository userProfileRepository, IAuthManager authManager, PasswordEncoder passwordEncoder) {
+    private final JwtProvider jwtProvider;
+    public UserProfileService(IUserProfileRepository userProfileRepository, IAuthManager authManager, PasswordEncoder passwordEncoder, JwtProvider jwtProvider) {
         super(userProfileRepository);
         this.userProfileRepository = userProfileRepository;
         this.authManager = authManager;
         this.passwordEncoder = passwordEncoder;
+        this.jwtProvider = jwtProvider;
     }
 
     public Boolean createUser(UserCreateRequestDto dto){ //dto --> authId, name, surname, email, username
@@ -40,8 +43,13 @@ public class UserProfileService extends ServiceManager<UserProfile, String> {
     }
 
     @Transactional
-    public Boolean updateUser(UserUpdateRequestDto dto){
-        Optional<UserProfile> userProfile = userProfileRepository.findById(dto.getId());
+    public Boolean updateUser(String token ,UserUpdateRequestDto dto){
+        Optional<Long> authId = jwtProvider.getIdFromToken(token);
+        if (authId.isEmpty()){
+            throw new UserProfileManagerException(ErrorType.INVALID_TOKEN);
+        }
+
+        Optional<UserProfile> userProfile = userProfileRepository.findOptionalByAuthId(authId.get());
         if (userProfile.isPresent()){
             userProfileRepository.save(IUserProfileMapper.INSTANCE.fromUpdateDtoToUserProfile(dto,userProfile.get()));
             //33. satırdan sonra 'userProfile' nesnesi güncel haliyle bulunmaktadır
@@ -81,7 +89,12 @@ public class UserProfileService extends ServiceManager<UserProfile, String> {
     }
 
     public Boolean passwordChange(PasswordChangeRequestDto dto){
-        Optional<UserProfile> userProfile = userProfileRepository.findById(dto.getId());
+        Optional<Long> authId = jwtProvider.getIdFromToken(dto.getToken());
+        if (authId.isEmpty()){
+            throw new UserProfileManagerException(ErrorType.INVALID_TOKEN);
+        }
+
+        Optional<UserProfile> userProfile = userProfileRepository.findOptionalByAuthId(authId.get());
         if (userProfile.isPresent()){
             if (passwordEncoder.matches(dto.getOldPassword(), userProfile.get().getPassword())){
                 userProfile.get().setPassword(passwordEncoder.encode(dto.getNewPassword()));
