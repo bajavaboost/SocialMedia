@@ -7,6 +7,7 @@ import com.socialmedia.service.AuthService;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import static com.socialmedia.constant.ApiUrls.*;
 
@@ -59,11 +60,13 @@ public class AuthController {
     }
 
     @GetMapping(FIND_ALL)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<Auth>> findAll(){
         return ResponseEntity.ok(authService.findAll());
     }
 
     @DeleteMapping(DELETE)
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<Boolean> delete(String token){
         return ResponseEntity.ok(authService.delete(token));
     }

@@ -74,7 +74,6 @@ public class AuthService extends ServiceManager<Auth, Long> {
         return responseDto;
     }
 
-    //TODO maile gönderilen verilerde password şifrelenmiş olarak gönderiliyor.
     public RegisterResponseDto registerWithRabbitMQ(RegisterRequestDto dto) {
         Auth auth = IAuthMapper.INSTANCE.fromAuthRegisterRequestDtoToAuth(dto);
         if (auth.getPassword().equals(dto.getRePassword())){
@@ -139,6 +138,7 @@ public class AuthService extends ServiceManager<Auth, Long> {
         throw new RuntimeException("Hata");
     }
 
+    //TODO delete metodu token almamalı, sebebi ise giriş yapan kişi ADMIN ise silmek istediği USER' ın token ı burada parametre olarak verilmelidir bu da tasarım olarak doğru değildir. token yerine kullanıcı id bilgisi alınması gerekmketedir.
     @Transactional
     public Boolean delete(String token){
         Optional<Long> authId = jwtProvider.getIdFromToken(token);

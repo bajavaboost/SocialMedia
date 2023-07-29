@@ -76,6 +76,5 @@ public class JwtFilter extends OncePerRequestFilter {
          * ve bu bilgiler güvenlik bağlamına yerleştirilir.
          * Son olarak, filtre zincirindeki bir sonraki adıma geçilir ve istek devam eder.
          */
-
     }
 }
